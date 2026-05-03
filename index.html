@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Lean & Loaded — Protein Ice Cream</title>
+  <title>Lean &amp; Loaded — Protein Ice Cream</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -14,7 +14,6 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --primary-blue: #E6E7E8;
       --logo-blue:    #87CEEB;
       --text-main:    #2B3A4F;
       --accent-coral: #FFADAD;
@@ -259,27 +258,6 @@
     .btn-ghost svg { transition: transform 0.2s; }
     .btn-ghost:hover svg { transform: translateX(4px); }
 
-    .hero-badges {
-      display: flex; gap: 1.5rem; margin-top: 2.5rem;
-    }
-    .badge {
-      display: flex; flex-direction: column;
-    }
-    .badge-num {
-      font-family: var(--font-secondary);
-      font-size: 2rem; font-weight: 700;
-      color: var(--logo-blue); line-height: 1;
-    }
-    .badge-label {
-      font-size: 0.7rem; font-weight: 500;
-      color: #8a9ab0; letter-spacing: 0.05em;
-      text-transform: uppercase;
-    }
-    .badge-divider {
-      width: 1px; background: var(--border);
-      align-self: stretch; margin: 0 0.5rem;
-    }
-
     /* Hero visual */
     .hero-visual {
       display: flex; justify-content: center; align-items: center;
@@ -321,14 +299,6 @@
       letter-spacing: 0.06em; text-transform: uppercase;
     }
 
-    .hcard-pill {
-      background: var(--text-main); color: #fff;
-      border-radius: 14px; padding: 0.5rem 1rem;
-      font-size: 0.72rem; font-weight: 600;
-      letter-spacing: 0.05em;
-      white-space: nowrap;
-      box-shadow: 0 4px 12px rgba(43,58,79,0.2);
-    }
     .hcard-protein {
       top: 10px; right: 0px;
       background: var(--accent-coral);
@@ -358,13 +328,6 @@
       color: var(--text-main);
     }
     .hcard-tag .ttext span { color: var(--logo-blue); }
-
-    /* ─── Wave Divider ──────────────────────────────────────────────── */
-    .wave {
-      display: block; width: 100%; overflow: hidden;
-      line-height: 0;
-    }
-    .wave svg { display: block; }
 
     /* ─── Why Section ───────────────────────────────────────────────── */
     #why {
@@ -653,7 +616,6 @@
     .footer-logo {
       display: flex; align-items: center; gap: 0.5rem;
     }
-    .footer-logo img { height: 32px; filter: brightness(0) invert(1) opacity(0.7); }
     .footer-logo-text {
       font-family: var(--font-display);
       font-size: 1.4rem; font-weight: 700; color: #fff;
@@ -687,11 +649,9 @@
       .hero-inner { grid-template-columns: 1fr; text-align: center; gap: 2rem; }
       .hero-sub { max-width: 100%; }
       .hero-ctas { justify-content: center; }
-      .hero-badges { justify-content: center; }
       .hero-visual { display: none; }
       .why-grid { grid-template-columns: 1fr; }
       .contact-inner { grid-template-columns: 1fr; gap: 3rem; }
-      .form-row { grid-template-columns: 1fr; }
     }
     @media (max-width: 600px) {
       .products-grid { grid-template-columns: 1fr; }
@@ -738,8 +698,8 @@
   <nav id="navbar">
     <div class="nav-inner">
       <a href="#home" class="nav-logo">
-        <img src="../brand_assets/logo_reference.png" alt="Lean & Loaded logo" />
-        <span class="nav-logo-text">lean <span>&</span> loaded</span>
+        <img src="../brand_assets/logo_reference.png" alt="Lean &amp; Loaded logo" />
+        <span class="nav-logo-text">lean <span>&amp;</span> loaded</span>
       </a>
 
       <ul class="nav-links">
@@ -758,6 +718,7 @@
       <a href="#home"     onclick="closeMobile()">Home</a>
       <a href="#products" onclick="closeMobile()">Products</a>
       <a href="#contact"  onclick="closeMobile()">Contact Us</a>
+      <a href="YOUR_GOOGLE_FORM_LINK_HERE" target="_blank" rel="noopener" onclick="closeMobile()">Order Now</a>
     </div>
   </nav>
 
@@ -771,7 +732,7 @@
           loves you <em>back</em>
         </h1>
         <p class="hero-sub">
-          High-protein, zero added sugar frozen treats for gym & fitness enthusiasts, health conscious individuals, or anyone who just wants to enjoy without the guilt.
+          High-protein, zero added sugar frozen treats for gym &amp; fitness enthusiasts, health conscious individuals, or anyone who just wants to enjoy without the guilt.
         </p>
         <div class="hero-ctas">
           <a href="#products" class="btn-primary">Explore the Menu</a>
@@ -806,7 +767,7 @@
   <!-- ── WHY US ───────────────────────────────────────────────────── -->
   <section id="why">
     <div class="container">
-      <div class="section-label">Why Lean & Loaded</div>
+      <div class="section-label reveal">Why Lean &amp; Loaded</div>
       <div class="why-grid">
         <div class="why-card reveal">
           <div class="why-icon">💪</div>
@@ -986,7 +947,7 @@
             <em>loaded up.</em>
           </h2>
           <p>
-            Made to order only, reach out to us via our socials (telegram, instagram, tiktok).
+            Pre-orders only, reach out to us via our socials (telegram, instagram, tiktok).
           </p>
 
           <div class="contact-cards">
@@ -994,7 +955,7 @@
               <div class="contact-card-icon tg">✈️</div>
               <div class="contact-card-text">
                 <strong>Telegram</strong>
-                <span>Customer enquiries — DM us here</span>
+                <span>Join our tele channel — DM us here</span>
               </div>
             </a>
             <a href="https://instagram.com/leanandloaded.sg" class="contact-card" target="_blank" rel="noopener">
@@ -1025,7 +986,7 @@
             allowfullscreen=""
             loading="lazy"
             referrerpolicy="no-referrer-when-downgrade"
-            title="Lean & Loaded location — 174C Edgefield Plains S823174"
+            title="Lean &amp; Loaded location — 174C Edgefield Plains S823174"
           ></iframe>
         </div>
       </div>
@@ -1036,8 +997,7 @@
   <footer>
     <div class="footer-inner">
       <div class="footer-logo">
-        <img src="../brand_assets/logo_reference.png" alt="Lean & Loaded" />
-        <span class="footer-logo-text">lean & loaded</span>
+        <span class="footer-logo-text">lean &amp; loaded</span>
       </div>
       <p class="footer-tagline">Protein-packed. Guilt-free. Made in the heart of Punggol.</p>
       <ul class="footer-links">
@@ -1046,13 +1006,13 @@
         <li><a href="#contact">Contact</a></li>
       </ul>
       <p class="footer-copy">
-        © 2026 Lean & Loaded. All rights reserved. Singapore Home-Based Business.
+        &copy; 2026 Lean &amp; Loaded. All rights reserved. Singapore Home-Based Business.
       </p>
     </div>
   </footer>
 
   <!-- ── FLOATING TELEGRAM ─────────────────────────────────────────── -->
-  <a href="https://t.me/leanandloaded" class="fab-tg" target="_blank" rel="noopener" aria-label="Order on Telegram">
+  <a href="https://t.me/leanandloaded" class="fab-tg" target="_blank" rel="noopener" aria-label="Chat with us on Telegram">
     <svg viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg">
       <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L7.446 14.11l-2.95-.924c-.64-.203-.658-.64.135-.954l11.566-4.458c.537-.194 1.006.131.697.447z"/>
     </svg>
