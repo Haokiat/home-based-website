@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Lean &amp; Loaded — Protein Ice Cream</title>
+  <title>Lean & Loaded — Protein Ice Cream</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -14,9 +14,10 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
+      --primary-blue: #E6E7E8;
       --logo-blue:    #87CEEB;
       --text-main:    #2B3A4F;
-      --accent-coral: #FFADAD;
+      --accent-coral: #dfdfdf;
       --bg-page:      #FFFFFF;
       --bg-ghost:     #F8F9FA;
       --border:       #E6E7E8;
@@ -164,7 +165,7 @@
       min-height: 100vh;
       display: flex; flex-direction: column; justify-content: center;
       padding-top: 80px;
-      background: linear-gradient(150deg, #ffffff 0%, #f0f8ff 40%, #daeeff 100%);
+      background: linear-gradient(150deg, #cdf4ff 0%, #f0f8ff 40%, #daeeff 100%);
       position: relative;
       overflow: hidden;
     }
@@ -174,7 +175,7 @@
       content: '';
       position: absolute; top: -120px; right: -120px;
       width: 500px; height: 500px;
-      background: radial-gradient(circle, rgba(135,206,235,0.25) 0%, transparent 70%);
+      background: radial-gradient(circle, rgb(211, 243, 255) 0%, transparent 70%);
       border-radius: 50%;
       pointer-events: none;
     }
@@ -182,7 +183,7 @@
       content: '';
       position: absolute; bottom: -80px; left: -80px;
       width: 400px; height: 400px;
-      background: radial-gradient(circle, rgba(255,173,173,0.2) 0%, transparent 70%);
+      background: radial-gradient(circle, rgb(213, 254, 255) 0%, transparent 70%);
       border-radius: 50%;
       pointer-events: none;
     }
@@ -201,11 +202,7 @@
       letter-spacing: 0.1em; text-transform: uppercase;
       color: var(--logo-blue); margin-bottom: 1rem;
     }
-    .hero-kicker::before {
-      content: '';
-      display: inline-block; width: 28px; height: 2px;
-      background: var(--logo-blue);
-    }
+
 
     .hero-headline {
       font-family: var(--font-secondary);
@@ -228,303 +225,158 @@
       margin-bottom: 2rem;
     }
 
-    .hero-ctas { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
-    .btn-primary {
+    .hero-ctas {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+    }
+
+        /* Shared base */
+    .hero-ctas a {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+
+    padding: 14px 18px;
+
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+
+    transition: all 0.4s ease;
+
+    border-radius: 0; 
+    }
+
+    /* PRIMARY */
+    .btn-primary_1 {
+    background: #21475197;
+    color: #fff;
+    border: 1px solid #000;
+    }
+
+    .btn-primary_1:hover {
+    opacity: 0.6;
+    transform: translateY(-4px);
+    }
+
+    .btn-primary_2 {
+    background: rgba(76, 131, 145, 0.6);
+    color: #fff;
+    border: 0;
+    }
+
+    .btn-primary_2:hover {
+    background: rgba(0, 0, 0, 0);
+    }
+
+    .btn-primary_1 {
       background: var(--text-main);
       color: #fff;
       font-size: 0.78rem;
       font-weight: 600;
       letter-spacing: 0.08em;
-      text-transform: uppercase;
       padding: 0.8rem 2rem;
       border-radius: 30px;
       text-decoration: none;
       transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
       box-shadow: 0 4px 16px rgba(43,58,79,0.18);
     }
-    .btn-primary:hover {
+    .btn-primary_1:hover {
       background: var(--logo-blue);
       transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(135,206,235,0.35);
-    }
-    .btn-ghost {
-      font-size: 0.78rem; font-weight: 600;
-      letter-spacing: 0.08em; text-transform: uppercase;
-      color: var(--text-main); text-decoration: none;
-      display: flex; align-items: center; gap: 0.4rem;
-      transition: color 0.2s;
-    }
-    .btn-ghost:hover { color: var(--logo-blue); }
-    .btn-ghost svg { transition: transform 0.2s; }
-    .btn-ghost:hover svg { transform: translateX(4px); }
-
-    /* Hero visual */
-    .hero-visual {
-      display: flex; justify-content: center; align-items: center;
-      position: relative;
-    }
-    .hero-card-stack { position: relative; width: 320px; height: 380px; }
-
-    .hcard {
-      position: absolute;
-      background: #fff;
-      border-radius: 24px;
-      padding: 1.5rem;
-      box-shadow: 0 8px 40px rgba(43,58,79,0.1);
-    }
-    .hcard-main {
-      width: 260px; height: 300px;
-      top: 40px; left: 30px;
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      gap: 0.75rem;
-      background: linear-gradient(135deg, #fff 0%, #f0f8ff 100%);
-      border: 1.5px solid var(--border);
-    }
-    .hcard-main .ice-emoji {
-      font-size: 5rem; line-height: 1;
-      animation: float 3s ease-in-out infinite;
-    }
-    @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50%       { transform: translateY(-10px); }
-    }
-    .hcard-main-label {
-      font-family: var(--font-secondary);
-      font-size: 1.4rem; font-weight: 700;
-      color: var(--text-main);
-    }
-    .hcard-main-sub {
-      font-size: 0.7rem; color: #8a9ab0;
-      letter-spacing: 0.06em; text-transform: uppercase;
+      box-shadow: 0 8px 24px rgba(38, 40, 41, 0.35);
     }
 
-    .hcard-protein {
-      top: 10px; right: 0px;
-      background: var(--accent-coral);
-      border-radius: 16px; padding: 0.8rem 1.1rem;
-      display: flex; flex-direction: column; align-items: center;
-      box-shadow: 0 4px 16px rgba(255,173,173,0.4);
+    .btn-primary_2 {
+      background: rgba(104, 204, 229, 0.301);
+      color: #0c0a0a;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      padding: 0.8rem 2rem;
+      border-radius: 30px;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 4px 16px rgba(43,58,79,0.18);
     }
-    .hcard-protein .pnum {
-      font-family: var(--font-secondary);
-      font-size: 1.8rem; font-weight: 700;
-      color: var(--text-main); line-height: 1;
+    .btn-primary_2:hover {
+      background: var(--logo-blue);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(38, 40, 41, 0.35);
     }
-    .hcard-protein .plabel {
-      font-size: 0.65rem; font-weight: 600; color: #9a5555;
-      text-transform: uppercase; letter-spacing: 0.06em;
-    }
+    
 
-    .hcard-tag {
-      bottom: 20px; left: 0;
-      background: #fff;
-      border-radius: 12px; padding: 0.5rem 1rem;
-      box-shadow: 0 4px 16px rgba(43,58,79,0.1);
-      border: 1px solid var(--border);
+    /* ─── Wave Divider ──────────────────────────────────────────────── */
+    .wave {
+      display: block; width: 100%; overflow: hidden;
+      line-height: 0;
     }
-    .hcard-tag .ttext {
-      font-size: 0.72rem; font-weight: 600;
-      color: var(--text-main);
-    }
-    .hcard-tag .ttext span { color: var(--logo-blue); }
+    .wave svg { display: block; }
 
-    /* ─── Why Section ───────────────────────────────────────────────── */
-    #why {
-      background: var(--bg-ghost);
-      padding: 5rem 0;
-    }
-    .why-grid {
-      display: grid; grid-template-columns: repeat(3, 1fr);
-      gap: 2rem; margin-top: 3rem;
-    }
-    .why-card {
-      background: #fff;
-      border-radius: 20px;
-      padding: 2rem 1.75rem;
-      border: 1px solid var(--border);
-      transition: transform 0.25s, box-shadow 0.25s;
-    }
-    .why-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 12px 32px rgba(43,58,79,0.08);
-    }
-    .why-icon {
-      width: 52px; height: 52px;
-      background: linear-gradient(135deg, #daeeff, #f0f8ff);
-      border-radius: 14px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.5rem; margin-bottom: 1rem;
-    }
-    .why-title {
-      font-family: var(--font-secondary);
-      font-size: 1.3rem; font-weight: 700;
-      color: var(--text-main); margin-bottom: 0.5rem;
-    }
-    .why-desc {
-      font-size: var(--size-body);
-      line-height: 1.7; color: #6a7c90;
-    }
 
-    /* ─── Products ──────────────────────────────────────────────────── */
-    #products {
+    /* ─── Flavours ──────────────────────────────────────────────────── */
+
+
+    #flavours {
       background: var(--bg-page);
       padding: 6rem 0;
     }
-    .products-header { text-align: center; margin-bottom: 4rem; }
-    .products-header h2 {
+
+    .flavour-header-reveal {
+    text-align: center;
+    }
+
+    .flavours-header h2 {
       font-family: var(--font-display);
       font-size: var(--size-h1);
       color: var(--text-main);
       margin-top: 0.5rem;
     }
-    .products-header p {
+    .flavours-header p {
       font-size: var(--size-body);
-      color: #6a7c90; margin-top: 0.75rem; line-height: 1.7;
+      color: #ffffff; margin-top: 0.75rem; line-height: 1.7;
     }
 
-    .product-category {
-      margin-bottom: 3.5rem;
-    }
-    .category-title {
-      font-family: var(--font-display);
-      font-size: var(--size-h1);
-      color: var(--text-main);
-      padding-bottom: 0.75rem;
-      border-bottom: 2px solid var(--border);
-      margin-bottom: 2rem;
-      display: flex; align-items: center; gap: 0.75rem;
-    }
-    .category-title span { color: var(--logo-blue); }
-
-    .products-grid {
-      display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 1.5rem;
-    }
-    .product-card {
-      background: var(--bg-ghost);
-      border-radius: 20px;
-      padding: 1.75rem;
-      border: 1px solid var(--border);
-      transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
-      position: relative;
-      overflow: hidden;
-    }
-    .product-card::before {
-      content: '';
-      position: absolute; top: 0; left: 0; right: 0;
-      height: 3px;
-      background: linear-gradient(90deg, var(--logo-blue), var(--accent-coral));
-      opacity: 0; transition: opacity 0.25s;
-    }
-    .product-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 12px 32px rgba(43,58,79,0.1);
-      border-color: #cce5f5;
-    }
-    .product-card:hover::before { opacity: 1; }
-
-    .product-num {
-      font-family: var(--font-display);
-      font-size: 0.85rem; font-weight: 700;
-      color: var(--logo-blue);
-      letter-spacing: 0.04em;
-      margin-bottom: 0.2rem;
-    }
-    .product-name {
-      font-family: var(--font-display);
-      font-size: var(--size-h2);
-      font-weight: 700;
-      color: var(--text-main);
-      margin-bottom: 1rem;
+    .scroll-section {
+    height: 800vh; /* 👈 gives scroll room */
+    position: relative;
     }
 
-    .product-base {
-      margin-bottom: 1rem;
-    }
-    .product-base-label {
-      font-family: var(--font-ui);
-      font-size: var(--size-label);
-      font-weight: 600;
-      text-decoration: underline;
-      color: var(--text-main);
-      text-transform: capitalize;
-      margin-bottom: 0.3rem;
-    }
-    .product-base-text {
-      font-size: var(--size-body);
-      color: #6a7c90;
-      line-height: 1.6;
+    .carousel {
+    position: sticky;
+    top: 200px;
+    
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    padding: 20px;
+
+    scroll-snap-type: x mandatory;
+   
+
+    /* hide scrollbar */
+    scrollbar-width: none;       /* Firefox */
+    -ms-overflow-style: none;    /* IE/Edge */
     }
 
-    .product-macros {
-      display: flex; align-items: center; gap: 0.5rem;
-      flex-wrap: wrap;
-    }
-    .macro-label {
-      font-family: var(--font-ui);
-      font-size: var(--size-label);
-      font-weight: 600;
-      text-decoration: underline;
-      color: var(--text-main);
-    }
-    .macro-chip {
-      background: #fff;
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 0.25rem 0.75rem;
-      font-size: var(--size-body);
-      color: var(--text-main);
-      font-weight: 500;
-    }
-    .macro-chip.protein {
-      background: linear-gradient(135deg, #daeeff, #c8e8f8);
-      border-color: #b0d8f0;
-      color: #2B3A4F; font-weight: 600;
+    .carousel::-webkit-scrollbar {
+    display: none;               /* Chrome, Safari */
     }
 
-    .product-price {
-      margin-top: 1.25rem;
-      padding-top: 1rem;
-      border-top: 1px solid var(--border);
-      display: flex; align-items: center; justify-content: space-between;
-    }
-    .price-amount {
-      font-family: var(--font-display);
-      font-size: 1.5rem; font-weight: 700;
-      color: var(--text-main);
-    }
-    .price-unit { font-size: var(--size-small); color: #8a9ab0; }
-    .btn-add {
-      background: var(--text-main);
-      color: #fff;
-      border: none; cursor: pointer;
-      width: 36px; height: 36px;
-      border-radius: 50%;
-      font-size: 1.2rem; line-height: 1;
-      display: flex; align-items: center; justify-content: center;
-      transition: background 0.2s, transform 0.2s;
-    }
-    .btn-add:hover { background: var(--logo-blue); transform: scale(1.1); }
+    .item {
+    flex: 0 0 80%; 
+    height: 530px;
 
-    .replacements-box {
-      background: linear-gradient(135deg, #fef8f8, #fff5f5);
-      border: 1px solid #ffd9d9;
-      border-radius: 16px;
-      padding: 1.25rem 1.75rem;
-      margin-top: 2.5rem;
-      display: flex; align-items: flex-start; gap: 0.75rem;
+    border-radius: 20px;
+    background: #f5f5f5;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    scroll-snap-align: center;
     }
-    .replacements-box .r-icon { font-size: 1.1rem; margin-top: 1px; }
-    .replacements-box .r-title {
-      font-size: var(--size-label); font-weight: 600;
-      color: var(--text-main); margin-bottom: 0.3rem;
-    }
-    .replacements-box .r-text {
-      font-size: var(--size-small);
-      color: #9a7070; line-height: 1.6;
-    }
-    .replacements-box .r-text span { font-weight: 600; color: var(--text-main); }
 
     /* ─── Contact ───────────────────────────────────────────────────── */
     #contact {
@@ -616,6 +468,7 @@
     .footer-logo {
       display: flex; align-items: center; gap: 0.5rem;
     }
+    .footer-logo img { height: 32px; filter: brightness(0) invert(1) opacity(0.7); }
     .footer-logo-text {
       font-family: var(--font-display);
       font-size: 1.4rem; font-weight: 700; color: #fff;
@@ -649,9 +502,11 @@
       .hero-inner { grid-template-columns: 1fr; text-align: center; gap: 2rem; }
       .hero-sub { max-width: 100%; }
       .hero-ctas { justify-content: center; }
+      .hero-badges { justify-content: center; }
       .hero-visual { display: none; }
       .why-grid { grid-template-columns: 1fr; }
       .contact-inner { grid-template-columns: 1fr; gap: 3rem; }
+      .form-row { grid-template-columns: 1fr; }
     }
     @media (max-width: 600px) {
       .products-grid { grid-template-columns: 1fr; }
@@ -698,17 +553,15 @@
   <nav id="navbar">
     <div class="nav-inner">
       <a href="#home" class="nav-logo">
-        <img src="../brand_assets/logo_reference.png" alt="Lean &amp; Loaded logo" />
-        <span class="nav-logo-text">lean <span>&amp;</span> loaded</span>
+        <img src="../brand_assets/logo_reference.png" alt="Lean & Loaded logo" />
+        <span class="nav-logo-text">lean <span>&</span> loaded</span>
       </a>
 
       <ul class="nav-links">
         <li><a href="#home">Home</a></li>
-        <li><a href="#products">Products</a></li>
+        <li><a href="#products">Menu</a></li>
         <li><a href="#contact">Contact</a></li>
       </ul>
-
-      <a href="YOUR_GOOGLE_FORM_LINK_HERE" class="btn-order" target="_blank" rel="noopener">Order Now</a>
 
       <div class="hamburger" id="hamburger" aria-label="Menu">
         <span></span><span></span><span></span>
@@ -718,7 +571,6 @@
       <a href="#home"     onclick="closeMobile()">Home</a>
       <a href="#products" onclick="closeMobile()">Products</a>
       <a href="#contact"  onclick="closeMobile()">Contact Us</a>
-      <a href="YOUR_GOOGLE_FORM_LINK_HERE" target="_blank" rel="noopener" onclick="closeMobile()">Order Now</a>
     </div>
   </nav>
 
@@ -726,236 +578,69 @@
   <section id="home">
     <div class="hero-inner">
       <div class="hero-text">
-        <div class="hero-kicker">Made in the heart of Punggol</div>
+        <div class="hero-kicker">Only 8 mins away from Meridian LRT</div>
         <h1 class="hero-headline">
-          Ice Cream that<br />
-          loves you <em>back</em>
+          A snack with  <em>no strings attached</em>
         </h1>
         <p class="hero-sub">
-          High-protein, zero added sugar frozen treats for gym &amp; fitness enthusiasts, health conscious individuals, or anyone who just wants to enjoy without the guilt.
+          Made to order high-protein ice cream with zero added sugar. Pre-order now.
         </p>
         <div class="hero-ctas">
-          <a href="#products" class="btn-primary">Explore the Menu</a>
-          <a href="YOUR_GOOGLE_FORM_LINK_HERE" class="btn-ghost" target="_blank" rel="noopener">
-            Order Now
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-              <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </a>
+        <a href="https://forms.gle/Zy7T9JeGd9vAyqZq5" class="btn-primary_1" target="_blank" rel="noopener">
+            Order & Collect
+        </a>
+
+        <a href="https://forms.gle/QtUR6pStCUwQ4n9V6" class="btn-primary_2" target="_blank" rel="noopener">
+            Get it Delivered
+        </a>
         </div>
       </div>
 
-      <div class="hero-visual">
-        <div class="hero-card-stack">
-          <div class="hcard hcard-main">
-            <div class="ice-emoji">🍦</div>
-            <div class="hcard-main-label">Protein Ice Cream</div>
-            <div class="hcard-main-sub">Made with Rokeby Milk</div>
-          </div>
-          <div class="hcard hcard-protein">
-            <span class="pnum">40g</span>
-            <span class="plabel">Protein</span>
-          </div>
-          <div class="hcard hcard-tag">
-            <span class="ttext">Made with <span>♥</span> in Punggol</span>
-          </div>
-        </div>
-      </div>
-    </div>
+      
   </section>
 
-  <!-- ── WHY US ───────────────────────────────────────────────────── -->
-  <section id="why">
+
+  <!-- ── Flavours ─────────────────────────────────────────────────── -->
+
+<section id="flavours">
+
     <div class="container">
-      <div class="section-label reveal">Why Lean &amp; Loaded</div>
-      <div class="why-grid">
-        <div class="why-card reveal">
-          <div class="why-icon">💪</div>
-          <div class="why-title">Protein-Packed</div>
-          <p class="why-desc">Each pint delivers up to 40g of protein — for your post-workout muscle recovery or simply just a protein fix.</p>
+      <div class="scroll-section">
+        <div class="flavour-header-reveal">
+            <h2>The Menu</h2>
         </div>
-        <div class="why-card reveal" style="transition-delay:0.1s">
-          <div class="why-icon">🥛</div>
-          <div class="why-title">Clean Ingredients</div>
-          <p class="why-desc">No added sugar in our base recipes — just real, quality ingredients.</p>
+
+        <div class="carousel">
+        <div class="item">Choconana</div>
+        <div class="item">Peanut Banana</div>
+        <div class="item">Keto Avocoffee</div>
+        <div class="item">Tau Huey</div>
+        <div class="item">Chrysanthemum</div>
         </div>
-        <div class="why-card reveal" style="transition-delay:0.2s">
-          <div class="why-icon">🍃</div>
-          <div class="why-title">Handcrafted Freshness</div>
-          <p class="why-desc">Made in small batches with the Ninja Creami — every pint is made to order for maximum freshness.</p>
-        </div>
+
       </div>
     </div>
-  </section>
+</section>
 
-  <!-- ── PRODUCTS ─────────────────────────────────────────────────── -->
-  <section id="products">
-    <div class="container">
-      <div class="products-header reveal">
-        <div class="section-label">The Menu</div>
-        <h2>What's Loaded Today</h2>
-        <p>Two categories, five flavours — all designed for people who refuse to choose between taste and health.</p>
-      </div>
 
-      <!-- Protein Ice Cream -->
-      <div class="product-category reveal">
-        <h3 class="category-title">
-          <span>🍦</span> Protein Ice Cream
-        </h3>
-        <div class="products-grid">
-
-          <div class="product-card">
-            <div class="product-num">#1</div>
-            <div class="product-name">Choconana</div>
-            <div class="product-base">
-              <div class="product-base-label">Base:</div>
-              <div class="product-base-text">Rokeby Protein Milk · Banana · Cocoa</div>
-            </div>
-            <div class="product-macros">
-              <span class="macro-label">Macros per tub</span>
-              <span class="macro-chip protein">40g protein</span>
-              <span class="macro-chip">~0g added sugar</span>
-            </div>
-            <div class="product-price">
-              <div>
-                <div class="price-amount">$16</div>
-                <div class="price-unit">per tub</div>
-              </div>
-              <button class="btn-add" onclick="handleOrder(this)">+</button>
-            </div>
-          </div>
-
-          <div class="product-card">
-            <div class="product-num">#2</div>
-            <div class="product-name">Peanut Banana</div>
-            <div class="product-base">
-              <div class="product-base-label">Base:</div>
-              <div class="product-base-text">Meiji High Protein Milk · Banana · Peanut Butter</div>
-            </div>
-            <div class="product-macros">
-              <span class="macro-label">Macros per tub</span>
-              <span class="macro-chip protein">40g protein</span>
-              <span class="macro-chip">~0g added sugar</span>
-            </div>
-            <div class="product-price">
-              <div>
-                <div class="price-amount">$16</div>
-                <div class="price-unit">per tub</div>
-              </div>
-              <button class="btn-add" onclick="handleOrder(this)">+</button>
-            </div>
-          </div>
-
-        </div>
-      </div>
-
-      <!-- Nice Cream -->
-      <div class="product-category reveal">
-        <h3 class="category-title">
-          <span>🌿</span> Nice Cream
-        </h3>
-        <div class="products-grid">
-
-          <div class="product-card">
-            <div class="product-num">#3</div>
-            <div class="product-name">Keto Avocoffee</div>
-            <div class="product-base">
-              <div class="product-base-label">Base:</div>
-              <div class="product-base-text">Coconut Cream · Cottage Cheese · Dates · Avocado · Cold Brew</div>
-            </div>
-            <div class="product-macros">
-              <span class="macro-label">Macros per tub</span>
-              <span class="macro-chip protein">40g protein</span>
-              <span class="macro-chip">Low carb</span>
-            </div>
-            <div class="product-price">
-              <div>
-                <div class="price-amount">$16</div>
-                <div class="price-unit">per tub</div>
-              </div>
-              <button class="btn-add" onclick="handleOrder(this)">+</button>
-            </div>
-          </div>
-
-          <div class="product-card">
-            <div class="product-num">#4</div>
-            <div class="product-name">Tau Huey</div>
-            <div class="product-base">
-              <div class="product-base-label">Base:</div>
-              <div class="product-base-text">Donki Silken Tofu · Cottage Cheese · Dates · Ginger</div>
-            </div>
-            <div class="product-macros">
-              <span class="macro-label">Macros per tub</span>
-              <span class="macro-chip protein">40g protein</span>
-              <span class="macro-chip">Plant-forward</span>
-            </div>
-            <div class="product-price">
-              <div>
-                <div class="price-amount">$16</div>
-                <div class="price-unit">per tub</div>
-              </div>
-              <button class="btn-add" onclick="handleOrder(this)">+</button>
-            </div>
-          </div>
-
-          <div class="product-card">
-            <div class="product-num">#5</div>
-            <div class="product-name">Chrysanthemum</div>
-            <div class="product-base">
-              <div class="product-base-label">Base:</div>
-              <div class="product-base-text">Meiji High Protein Milk · Maple Allulose · Chrysanthemum Tea</div>
-            </div>
-            <div class="product-macros">
-              <span class="macro-label">Macros per tub</span>
-              <span class="macro-chip protein">40g protein</span>
-              <span class="macro-chip">~0g added sugar</span>
-            </div>
-            <div class="product-price">
-              <div>
-                <div class="price-amount">$16</div>
-                <div class="price-unit">per tub</div>
-              </div>
-              <button class="btn-add" onclick="handleOrder(this)">+</button>
-            </div>
-          </div>
-
-        </div>
-      </div>
-
-      <!-- Replacements -->
-      <div class="replacements-box reveal">
-        <span class="r-icon">✦</span>
-        <div>
-          <div class="r-title">Customise Your Order</div>
-          <p class="r-text">
-            <span>+$2</span> — Upgrade to Rokeby Farms Protein Milk &nbsp;·&nbsp;
-            <span>+$2</span> — Swap to Monk Fruit / Stevia sweetener
-          </p>
-        </div>
-      </div>
-    </div>
-  </section>
 
   <!-- ── CONTACT ───────────────────────────────────────────────────── -->
   <section id="contact">
     <div class="container">
       <div class="contact-inner">
         <div class="contact-info reveal">
-          <div class="section-label">Contact Us</div>
+          <div class="section-label">Where to find us?</div>
           <h2>
             Let's get you<br />
             <em>loaded up.</em>
           </h2>
-          <p>
-            Pre-orders only, reach out to us via our socials (telegram, instagram, tiktok).
-          </p>
 
           <div class="contact-cards">
-            <a href="https://t.me/leanandloaded" class="contact-card" target="_blank" rel="noopener">
-              <div class="contact-card-icon tg">✈️</div>
+            <a href="t.me/leanandloaded" class="contact-card" target="_blank" rel="noopener">
+              <div class="contact-card-icon tg">🫶🏻</div>
               <div class="contact-card-text">
                 <strong>Telegram</strong>
-                <span>Join our tele channel — DM us here</span>
+                <span>Notifications & Updates</span>
               </div>
             </a>
             <a href="https://instagram.com/leanandloaded.sg" class="contact-card" target="_blank" rel="noopener">
@@ -986,7 +671,7 @@
             allowfullscreen=""
             loading="lazy"
             referrerpolicy="no-referrer-when-downgrade"
-            title="Lean &amp; Loaded location — 174C Edgefield Plains S823174"
+            title="Lean & Loaded location — 174C Edgefield Plains S823174"
           ></iframe>
         </div>
       </div>
@@ -997,7 +682,8 @@
   <footer>
     <div class="footer-inner">
       <div class="footer-logo">
-        <span class="footer-logo-text">lean &amp; loaded</span>
+        <img src="../brand_assets/logo_reference.png" alt="Lean & Loaded" />
+        <span class="footer-logo-text">lean & loaded</span>
       </div>
       <p class="footer-tagline">Protein-packed. Guilt-free. Made in the heart of Punggol.</p>
       <ul class="footer-links">
@@ -1006,13 +692,13 @@
         <li><a href="#contact">Contact</a></li>
       </ul>
       <p class="footer-copy">
-        &copy; 2026 Lean &amp; Loaded. All rights reserved. Singapore Home-Based Business.
+        © 2026 Lean & Loaded. All rights reserved. Singapore Home-Based Business.
       </p>
     </div>
   </footer>
 
   <!-- ── FLOATING TELEGRAM ─────────────────────────────────────────── -->
-  <a href="https://t.me/leanandloaded" class="fab-tg" target="_blank" rel="noopener" aria-label="Chat with us on Telegram">
+  <a href="https://t.me/leanandloaded" class="fab-tg" target="_blank" rel="noopener" aria-label="Order on Telegram">
     <svg viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg">
       <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L7.446 14.11l-2.95-.924c-.64-.203-.658-.64.135-.954l11.566-4.458c.537-.194 1.006.131.697.447z"/>
     </svg>
@@ -1020,6 +706,36 @@
 
   <!-- ── SCRIPTS ────────────────────────────────────────────────────── -->
   <script>
+    // carousel scroll on section scroll
+
+    const carousel = document.querySelector(".carousel");
+    const section = document.querySelector(".scroll-section");
+
+    let target = 0;
+    let current = 0;
+
+    window.addEventListener("scroll", () => {
+    const rect = section.getBoundingClientRect();
+
+    const scrollProgress = Math.min(
+        Math.max(-rect.top / rect.height, 0),
+        1
+    );
+
+    const maxScroll = carousel.scrollWidth - carousel.clientWidth;
+
+    target = scrollProgress * maxScroll;
+    });
+
+    function animate() {
+    current += (target - current) * 0.1;
+    carousel.scrollLeft = current;
+
+    requestAnimationFrame(animate);
+    }
+
+    animate();
+
     // Navbar scroll shadow
     const navbar = document.getElementById('navbar');
     window.addEventListener('scroll', () => {
