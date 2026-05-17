@@ -1,0 +1,70 @@
+{
+  "menu": {
+    "categories": [
+      {
+        "name": "Protein Ice Cream",
+        "items": [
+          {
+            "id": 1,
+            "name": "Choconana",
+            "base": ["Meji High Protein Milk","Cacao","Banana"],
+            "macros_per_tub": {
+              "protein_g": 35,
+              "added_sugars_g": 0,
+              "calories": 179
+            }
+          },
+          {
+            "id": 2,
+            "name": "Peanut Banana",
+            "base": ["Meji High Protein Milk", "Banana","PBfit"],
+            "macros_per_tub": {
+              "protein_g": 40,
+              "added_sugars_g": 0,
+              "calories": 200
+            }
+          }
+        ]
+      },
+      {
+        "name": "Nice Cream",
+        "items": [
+          {
+            "id": 3,
+            "name": "Keto Avocoffee",
+            "base": ["Coconut Cream","Avocado","Coffee","Cottage Cheese", "Dates"],
+            "macros_per_tub": {
+              "protein_g": 30,
+              "added_sugars_g": 0,
+              "calories": 200
+            }
+          },
+          {
+            "id": 4,
+            "name": "Tau Huey",
+            "base": ["Donki Silken Tofu", "Cottage Cheese", "Dates"],
+            "macros_per_tub": {
+              "protein_g": 40,
+              "added_sugars_g": 0,
+              "calories": 200
+            }
+          },
+          {
+            "id": 5,
+            "name": "Chrysanthemum",
+            "base": ["Meji High Protein Milk", "Chrysanthemum", "Logan", "Honey Dates"],
+            "macros_per_tub": {
+              "protein_g": 40,
+              "added_sugars_g": 0,
+              "calories": 200
+            }
+          }
+        ]
+      }
+    ],
+    "replacements": [
+      { "name": "Rokeby protein milk", "additional_cost_sgd": 2 },
+      { "name": "Monk fruit / Stevia", "additional_cost_sgd": 2 }
+    ]
+  }
+}

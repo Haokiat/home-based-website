@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lean & Loaded — Protein Ice Cream</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Schoolbell&family=Teachers:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ─── Reset & Root ─────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --primary-blue: #E6E7E8;
+      --logo-blue:    #87CEEB;
+      --text-main:    #2B3A4F;
+      --accent-coral: #dfdfdf;
+      --bg-page:      #FFFFFF;
+      --bg-ghost:     #F8F9FA;
+      --border:       #E6E7E8;
+
+      --size-h1:    2.25rem;
+      --size-h2:    1.75rem;
+      --size-label: 0.875rem;
+      --size-body:  0.8rem;
+      --size-small: 0.68rem;
+
+      --font-display:   'Schoolbell', cursive;
+      --font-secondary: 'Teachers', sans-serif;
+      --font-ui:        'Inter', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-ui);
+      color: var(--text-main);
+      background: var(--bg-page);
+      overflow-x: hidden;
+    }
+
+    /* ─── Utility ───────────────────────────────────────────────────── */
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 2rem; }
+    .tag {
+      display: inline-block;
+      background: var(--accent-coral);
+      color: var(--text-main);
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: 20px;
+    }
+    .section-label {
+      font-family: var(--font-ui);
+      font-size: var(--size-label);
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--logo-blue);
+      margin-bottom: 0.5rem;
+    }
+
+    /* fade-in on scroll */
+    .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ─── Navbar ────────────────────────────────────────────────────── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      transition: box-shadow 0.3s;
+    }
+    nav.scrolled { box-shadow: 0 2px 20px rgba(43,58,79,0.08); }
+    .nav-inner {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0.1rem 2rem;
+      max-width: 1100px; margin: 0 auto;
+    }
+    .nav-logo {
+      display: flex; align-items: center; gap: 0.rem;
+      text-decoration: none;
+    }
+    .nav-logo img { height: 50px; width: auto; }
+    .nav-logo-text span { color: var(--logo-blue); }
+    .nav-links {
+      display: flex; align-items: center; gap: 2rem;
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--text-main);
+      text-decoration: none;
+      position: relative;
+      transition: color 0.2s;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute; bottom: -3px; left: 0; right: 0;
+      height: 2px; background: var(--logo-blue);
+      transform: scaleX(0); transform-origin: left;
+      transition: transform 0.25s ease;
+    }
+    .nav-links a:hover { color: var(--logo-blue); }
+    .nav-links a:hover::after { transform: scaleX(1); }
+    .btn-order {
+      background: var(--text-main);
+      color: #fff;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.55rem 1.4rem;
+      border-radius: 30px;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .btn-order:hover { background: var(--logo-blue); transform: translateY(-1px); }
+
+    /* hamburger */
+    .hamburger {
+      display: none; flex-direction: column; gap: 5px;
+      cursor: pointer; padding: 4px;
+    }
+    .hamburger span {
+      display: block; width: 24px; height: 2px;
+      background: var(--text-main); border-radius: 2px;
+      transition: all 0.3s;
+    }
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    .mobile-menu {
+      display: none; flex-direction: column; gap: 1rem;
+      padding: 1.5rem 2rem;
+      border-top: 1px solid var(--border);
+      background: rgba(255,255,255,0.97);
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      font-size: 0.85rem; font-weight: 500;
+      text-decoration: none; color: var(--text-main);
+      letter-spacing: 0.06em; text-transform: uppercase;
+    }
+
+    /* ─── Hero ──────────────────────────────────────────────────────── */
+    #home {
+      min-height: 100vh;
+      display: flex; flex-direction: column; justify-content: center;
+      padding-top: 80px;
+      position: relative;
+      overflow: hidden;
+    }
+
+
+    
+    /* decorative blobs */
+    #home::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.35);
+      z-index: 0;
+    }
+
+    .hero-video {
+      position: absolute;
+      top: 50%; left: 50%;
+      width: 100vh;
+      height: 100vw;
+      transform: translate(-50%, -50%) rotate(90deg);
+      object-fit: cover;
+      z-index: 0;
+    }
+
+    .hero-inner {
+      display: grid; grid-template-columns: 1fr 1fr;
+      align-items: center; gap: 4rem;
+      padding: 4rem 2rem;
+      max-width: 1100px; margin: 0 auto;
+      position: relative; z-index: 1;
+    }
+
+    .hero-kicker {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      font-size: var(--size-label); font-weight: 600;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: v#ffffff;
+      margin-bottom: 1rem;
+    }
+
+
+    .hero-headline {
+      font-family: var(--font-secondary);
+      font-size: clamp(2.8rem, 6vw, 4.5rem);
+      font-weight: 500;
+      line-height: 1.1;
+      color: #ffffff;
+      margin-bottom: 1.25rem;
+    }
+    .hero-headline em {
+      font-style: normal;
+      color: var(--logo-blue);
+    }
+
+    .hero-sub {
+      font-size: 0.9rem;
+      line-height: 1.75;
+      color: rgba(255, 255, 255, 0.85);
+      max-width: 420px;
+      margin-bottom: 2rem;
+    }
+
+    .hero-ctas {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+    }
+
+        /* Shared base */
+    .hero-ctas a {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+
+    padding: 14px 18px;
+
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+
+    transition: all 0.4s ease;
+
+    border-radius: 0; 
+    }
+
+    /* PRIMARY */
+    .btn-primary_1 {
+    background: #21475197;
+    color: #fff;
+    border: 1px solid #000;
+    }
+
+    .btn-primary_1:hover {
+    opacity: 0.6;
+    transform: translateY(-4px);
+    }
+
+    .btn-primary_2 {
+    background: rgba(76, 131, 145, 0.6);
+    color: #fff;
+    border: 0;
+    }
+
+    .btn-primary_2:hover {
+    background: rgba(0, 0, 0, 0);
+    }
+
+    .btn-primary_1 {
+      background: var(--text-main);
+      color: #fff;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      padding: 0.8rem 2rem;
+      border-radius: 30px;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 4px 16px rgba(43,58,79,0.18);
+    }
+    .btn-primary_1:hover {
+      background: var(--logo-blue);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(38, 40, 41, 0.35);
+    }
+
+    .btn-primary_2 {
+      background: rgba(104, 204, 229, 0.301);
+      color: #0c0a0a;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      padding: 0.8rem 2rem;
+      border-radius: 30px;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 4px 16px rgba(43,58,79,0.18);
+    }
+    .btn-primary_2:hover {
+      background: var(--logo-blue);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(38, 40, 41, 0.35);
+    }
+    
+
+    /* ─── Wave Divider ──────────────────────────────────────────────── */
+    .wave {
+      display: block; width: 100%; overflow: hidden;
+      line-height: 0;
+    }
+    .wave svg { display: block; }
+
+
+    /* ─── Flavours ──────────────────────────────────────────────────── */
+
+
+    #flavours {
+      background: var(--bg-page);
+      padding: 6rem 0;
+    }
+
+    .flavour-header-reveal {
+    text-align: center;
+    padding-top: 1rem;
+    }
+
+    .flavours-header h2 {
+      font-family: var(--font-display);
+      font-size: var(--size-h1);
+      color: var(--text-main);
+      margin-top: 0.5rem;
+    }
+    .flavours-header p {
+      font-size: var(--size-body);
+      color: #ffffff; margin-top: 0.75rem; line-height: 1.7;
+    }
+
+    .scroll-section {
+    height: 700vh; /* 👈 gives scroll room */
+    position: relative;
+    }
+
+    .carousel {
+    position: sticky;
+    top: 150px;
+    
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    padding: 20px 0;
+
+    scroll-snap-type: x mandatory;
+   
+
+    /* hide scrollbar */
+    scrollbar-width: none;       /* Firefox */
+    -ms-overflow-style: none;    /* IE/Edge */
+    }
+
+    .carousel::-webkit-scrollbar {
+    display: none;               /* Chrome, Safari */
+    }
+
+    .item {
+      flex: 0 0 100%; 
+      height: 700px;
+      border-radius: 20px;
+      background: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      scroll-snap-align: center;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .item img {
+      width: 60%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 16px 16px 0 0;
+    }
+
+    @keyframes hover-float {
+      0%   { transform: translateY(0px) rotate(0deg); }
+      25%  { transform: translateY(-12px) rotate(-3deg); }
+      75%  { transform: translateY(-6px) rotate(3deg); }
+      100% { transform: translateY(0px) rotate(0deg); }
+    }
+
+    .item img.is-centered {
+      animation: hover-float 2.5s ease-in-out infinite;
+    }
+
+    .item span {
+      font-family: var(--font-secondary);
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--text-main);
+      padding: 1rem 0;
+    }
+
+    /* ─── Contact ───────────────────────────────────────────────────── */
+    #contact {
+      background: var(--bg-page);
+      padding: 6rem 0;
+    }
+    .contact-inner {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 5rem; align-items: start;
+    }
+    .contact-info h2 {
+      font-family: var(--font-secondary);
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 700;
+      color: var(--text-main);
+      margin-top: 0.5rem; margin-bottom: 1.25rem;
+      line-height: 1.15;
+    }
+    .contact-info h2 em {
+      font-style: normal; color: var(--logo-blue);
+    }
+    .contact-info p {
+      font-size: 0.85rem; line-height: 1.8;
+      color: #556070; margin-bottom: 2rem;
+    }
+    .contact-cards {
+      display: flex; flex-direction: column; gap: 1rem;
+    }
+    .contact-card {
+      display: flex; align-items: center; gap: 1rem;
+      background: var(--bg-ghost);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1rem 1.25rem;
+      text-decoration: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .contact-card:hover {
+      border-color: var(--logo-blue);
+      box-shadow: 0 4px 16px rgba(135,206,235,0.2);
+    }
+    .contact-card-icon {
+      width: 42px; height: 42px; flex-shrink: 0;
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem;
+    }
+    .contact-card-icon.tg  { background: #e4f4fc; }
+    .contact-card-icon.ig  { background: #fde8f5; }
+    .contact-card-icon.tt  { background: #f0f0f0; }
+    .contact-card-text strong {
+      display: block;
+      font-size: var(--size-label); font-weight: 600;
+      color: var(--text-main);
+    }
+    .contact-card-text span {
+      font-size: var(--size-small); color: #8a9ab0;
+    }
+
+    /* Map */
+    .map-wrap {
+      border-radius: 24px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      box-shadow: 0 8px 32px rgba(43,58,79,0.08);
+    }
+    .map-wrap h3 {
+      font-family: var(--font-display);
+      font-size: 1.5rem; font-weight: 700;
+      color: var(--text-main);
+      padding: 1.5rem 1.75rem 1rem;
+      background: var(--bg-ghost);
+      border-bottom: 1px solid var(--border);
+      margin: 0;
+    }
+    .map-wrap iframe {
+      display: block; width: 100%; height: 380px; border: 0;
+    }
+
+    /* ─── Footer ─────────────────────────────────────────────────────── */
+    footer {
+      background: var(--text-main);
+      padding: 3rem 0 2rem;
+    }
+    .footer-inner {
+      display: flex; flex-direction: column; align-items: center;
+      gap: 1.5rem; text-align: center;
+    }
+    .footer-logo {
+      display: flex; align-items: center; gap: 0.5rem;
+    }
+    .footer-logo img { height: 100px; filter: brightness(0) invert(1) opacity(0.7); }
+    .footer-logo-text {
+      font-family: var(--font-display);
+      font-size: 1.4rem; font-weight: 700; color: #fff;
+    }
+    .footer-tagline {
+      font-size: var(--size-small); color: rgba(255,255,255,0.5);
+      letter-spacing: 0.08em; text-transform: uppercase;
+    }
+    .footer-links {
+      display: flex; gap: 2rem; list-style: none;
+    }
+    .footer-links a {
+      font-size: 0.72rem; color: rgba(255,255,255,0.6);
+      text-decoration: none;
+      text-transform: uppercase; letter-spacing: 0.06em;
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--logo-blue); }
+    .footer-copy {
+      font-size: var(--size-small);
+      color: rgba(255,255,255,0.35);
+      border-top: 1px solid rgba(255,255,255,0.1);
+      padding-top: 1.5rem; width: 100%;
+      text-align: center;
+    }
+
+    /* ─── Responsive ─────────────────────────────────────────────────── */
+    @media (max-width: 900px) {
+      .nav-links, .btn-order { display: none; }
+      .hamburger { display: flex; }
+      .hero-inner { grid-template-columns: 1fr; text-align: center; gap: 2rem; }
+      .hero-sub { max-width: 100%; }
+      .hero-ctas { justify-content: center; }
+      .hero-badges { justify-content: center; }
+      .hero-visual { display: none; }
+      .why-grid { grid-template-columns: 1fr; }
+      .contact-inner { grid-template-columns: 1fr; gap: 3rem; }
+      .carousel { top: 60px; }
+      .container { padding: 0 0.5rem; }
+      .scroll-section { height: 1000vh; }
+      .form-row { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 600px) {
+      .products-grid { grid-template-columns: 1fr; }
+      .hero-headline { font-size: 2.4rem; }
+    }
+
+    /* ─── Floating Telegram ──────────────────────────────────────────── */
+    .fab-tg {
+      position: fixed; bottom: 2rem; right: 2rem;
+      width: 56px; height: 56px;
+      background: #229ED9;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 20px rgba(34,158,217,0.4);
+      text-decoration: none;
+      z-index: 200;
+      transition: transform 0.25s, box-shadow 0.25s;
+    }
+    .fab-tg:hover {
+      transform: scale(1.1) translateY(-2px);
+      box-shadow: 0 8px 28px rgba(34,158,217,0.5);
+    }
+    .fab-tg svg { width: 28px; height: 28px; }
+
+    /* tooltip */
+    .fab-tg::after {
+      content: 'Chat with us';
+      position: absolute; right: 68px; top: 50%;
+      transform: translateY(-50%);
+      background: var(--text-main); color: #fff;
+      font-size: 0.7rem; font-weight: 500;
+      padding: 0.4rem 0.8rem;
+      border-radius: 8px; white-space: nowrap;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.2s;
+    }
+    .fab-tg:hover::after { opacity: 1; }
+  </style>
+</head>
+
+<body>
+
+  <!-- ── NAVBAR ──────────────────────────────────────────────────── -->
+  <nav id="navbar">
+    <div class="nav-inner">
+      <a href="#home" class="nav-logo">
+        <img src="assets/logo.png" alt="Lean & Loaded logo" />
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="#home">Home</a></li>
+        <li><a href="#products">Menu</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+
+      <div class="hamburger" id="hamburger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+    <div class="mobile-menu" id="mobile-menu">
+      <a href="#home"     onclick="closeMobile()">Home</a>
+      <a href="#products" onclick="closeMobile()">Products</a>
+      <a href="#contact"  onclick="closeMobile()">Contact Us</a>
+    </div>
+  </nav>
+
+  <!-- ── HERO ────────────────────────────────────────────────────── -->
+  <section id="home">
+
+    <video autoplay muted loop playsinline class="hero-video">
+      <source src="assets/hero-bg.mp4" type="video/mp4">
+    </video>
+
+    <div class="hero-inner">
+      <div class="hero-text">
+        <div class="hero-kicker">Only 8 mins away from Meridian LRT</div>
+        <h1 class="hero-headline">
+          A snack with <em>no strings attached</em>
+        </h1>
+        <p class="hero-sub">
+          Made to order high-protein ice cream with zero added sugar. Pre-order now.
+        </p>
+        <div class="hero-ctas">
+          <a href="https://forms.gle/1BRvYBi991Q2vhBQ9" class="btn-primary_1" target="_blank" rel="noopener">
+            Order Here
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+
+  <!-- ── Flavours ─────────────────────────────────────────────────── -->
+
+<!-- ── Flavours ─────────────────────────────────────────────────── -->
+  <section id="flavours">
+    <div class="container">
+      <div class="scroll-section">
+        <div class="flavour-header-reveal">
+          <h2>The Menu</h2>
+        </div>
+
+        <div class="carousel">
+          <div class="item">
+            <img src="assets/choconana.png" alt="Choconana" />
+            <span>Choconana</span>
+          </div>
+          <div class="item">
+            <img src="assets/peanutnana.png" alt="Peanut Banana" />
+            <span>Peanut Banana</span>
+          </div>
+          <div class="item">
+            <img src="assets/avocado.png" alt="Keto Avocoffee" />
+            <span>Keto Avocoffee</span>
+          </div>
+          <div class="item">
+            <img src="assets/tauhuey.png" alt="Tau Huey" />
+            <span>Tau Huey</span>
+          </div>
+          <div class="item">
+            <img src="assets/chrysanthemum.png" alt="Chrysanthemum" />
+            <span>Chrysanthemum</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ── CONTACT ───────────────────────────────────────────────────── -->
+  <section id="contact">
+    <div class="container">
+      <div class="contact-inner">
+        <div class="contact-info reveal">
+          <div class="section-label">Where to find us?</div>
+          <h2>
+            Let's get you<br />
+            <em>loaded up.</em>
+          </h2>
+
+          <div class="contact-cards">
+            <a href="https://t.me/leanandloaded" class="contact-card" target="_blank" rel="noopener">
+              <div class="contact-card-icon tg">🫶🏻</div>
+              <div class="contact-card-text">
+                <strong>Telegram</strong>
+                <span>Notifications & Updates</span>
+              </div>
+            </a>
+            <a href="https://instagram.com/leanandloaded.sg" class="contact-card" target="_blank" rel="noopener">
+              <div class="contact-card-icon ig">📷</div>
+              <div class="contact-card-text">
+                <strong>Instagram</strong>
+                <span>@leanandloaded.sg</span>
+              </div>
+            </a>
+            <a href="https://www.tiktok.com/@leanandloaded.sg" class="contact-card" target="_blank" rel="noopener">
+              <div class="contact-card-icon tt">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="#2B3A4F" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.2 8.2 0 0 0 4.78 1.52V6.75a4.85 4.85 0 0 1-1.01-.06z"/>
+                </svg>
+              </div>
+              <div class="contact-card-text">
+                <strong>TikTok</strong>
+                <span>@leanandloaded.sg</span>
+              </div>
+            </a>
+          </div>
+        </div>
+
+        <div class="map-wrap reveal" style="transition-delay:0.15s">
+          <h3>Locate Us</h3>
+          <iframe
+            src="https://maps.google.com/maps?q=174C+Edgefield+Plains,+Singapore+823174&output=embed&z=16"
+            allowfullscreen=""
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            title="Lean & Loaded location — 174C Edgefield Plains S823174"
+          ></iframe>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FOOTER ────────────────────────────────────────────────────── -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-logo">
+        <img src="assets/logo.png" alt="Lean & Loaded logo" />
+      </div>
+      <p class="footer-tagline">Protein-packed. Guilt-free. Made in the heart of Punggol.</p>
+      <ul class="footer-links">
+        <li><a href="#home">Home</a></li>
+        <li><a href="#products">Menu</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+      <p class="footer-copy">
+        © 2026 Lean & Loaded. All rights reserved. Singapore Home-Based Business.
+      </p>
+    </div>
+  </footer>
+
+  <!-- ── FLOATING TELEGRAM ─────────────────────────────────────────── -->
+  <a href="https://t.me/leanandloaded" class="fab-tg" target="_blank" rel="noopener" aria-label="Order on Telegram">
+    <svg viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L7.446 14.11l-2.95-.924c-.64-.203-.658-.64.135-.954l11.566-4.458c.537-.194 1.006.131.697.447z"/>
+    </svg>
+  </a>
+
+
+  <!-- ── GSAP SCRIPTS ────────────────────────────────────────────────────── -->
+   <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
+   <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/ScrollTrigger.min.js"></script>
+
+
+  <!-- ── SCRIPTS ────────────────────────────────────────────────────── -->
+  <script>
+    gsap.registerPlugin(ScrollTrigger);
+
+    const carousel = document.querySelector(".carousel");
+    const section  = document.querySelector(".scroll-section");
+    const items    = document.querySelectorAll(".item");
+    
+
+    // Scroll-driven carousel
+    ScrollTrigger.create({
+      trigger: section,
+      start: "top top",
+      end: "bottom bottom",
+      scrub: 1,
+      onUpdate: (self) => {
+        const progress = self.progress;
+        const maxScroll = carousel.scrollWidth - carousel.clientWidth;
+        const currentScroll = progress * maxScroll;
+        const itemWidth = carousel.clientWidth;
+
+        carousel.scrollLeft = currentScroll;
+
+        items.forEach((item, i) => {
+          const img = item.querySelector("img");
+          if (!img) return;
+
+          const itemCenter = i * itemWidth * 0.95;
+          const distance = currentScroll - itemCenter;
+          const normalized = Math.max(-1, Math.min(1, distance / itemWidth));
+
+          const rotate     = normalized * 15;
+          const scale      = 1 - Math.abs(normalized) * 0.2;
+          const opacity    = 1 - Math.abs(normalized) * 0.3;
+          const translateX = normalized * -200;
+          const translateY = Math.abs(normalized) * -80;
+
+          if (Math.abs(normalized) < 0.15) {
+            img.classList.add("is-centered");
+          } else {
+            img.classList.remove("is-centered");
+            gsap.set(img, {
+              rotate,
+              scale,
+              opacity,
+              x: translateX,
+              y: translateY,
+            });
+          }
+        });
+      }
+    }); 
+
+    // ── Magnetic image effect ─────────────────────────────────────────
+    items.forEach((item) => {
+      const img = item.querySelector("img");
+      if (!img) return;
+
+      item.addEventListener("mousemove", (e) => {
+        if (!img.classList.contains("is-centered")) return;
+
+        const rect = item.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+
+        const dx = (e.clientX - centerX) / rect.width  * 80;
+        const dy = (e.clientY - centerY) / rect.height * 60;
+
+        gsap.to(img, {
+          x: dx,
+          y: dy,
+          duration: 0.4,
+          ease: "power2.out",
+        });
+      });
+
+      item.addEventListener("mouseleave", () => {
+        if (!img.classList.contains("is-centered")) return;
+
+        gsap.to(img, {
+          x: 0,
+          y: 0,
+          duration: 0.6,
+          ease: "elastic.out(1, 0.5)",
+        });
+      });
+
+      // Mobile touch
+      item.addEventListener("touchmove", (e) => {
+        if (!img.classList.contains("is-centered")) return;
+
+        const touch = e.touches[0];
+        const rect = item.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+
+        const dx = (touch.clientX - centerX) / rect.width  * 300;
+        const dy = (touch.clientY - centerY) / rect.height * 300;
+
+        gsap.to(img, {
+          x: dx,
+          y: dy,
+          duration: 0.4,
+          ease: "power2.out",
+        });
+      });
+
+      item.addEventListener("touchend", () => {
+        if (!img.classList.contains("is-centered")) return;
+
+        gsap.to(img, {
+          x: 0,
+          y: 0,
+          duration: 0.6,
+          ease: "elastic.out(1, 0.5)",
+        });
+      });
+    });
+
+    // Navbar scroll shadow
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 20);
+    });
+
+    // Mobile menu
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobile-menu');
+    hamburger.addEventListener('click', () => {
+      hamburger.classList.toggle('open');
+      mobileMenu.classList.toggle('open');
+    });
+    function closeMobile() {
+      hamburger.classList.remove('open');
+      mobileMenu.classList.remove('open');
+    }
+
+    // Scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver(
+      (entries) => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }),
+      { threshold: 0.12 }
+    );
+    reveals.forEach(el => observer.observe(el));
+
+    // Add-to-order button feedback
+    function handleOrder(btn) {
+      btn.textContent = '✓';
+      btn.style.background = '#25d366';
+      setTimeout(() => {
+        btn.textContent = '+';
+        btn.style.background = '';
+      }, 1800);
+      window.open('YOUR_GOOGLE_FORM_LINK_HERE', '_blank');
+    }
+  </script>
+
+</body>
+</html>
