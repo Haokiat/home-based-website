@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Lean &amp; Loaded — Protein Ice Cream</title>
+  <title>Lean & Loaded — Protein Ice Cream</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -14,9 +14,10 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
+      --primary-blue: #E6E7E8;
       --logo-blue:    #87CEEB;
       --text-main:    #2B3A4F;
-      --accent-coral: #FFADAD;
+      --accent-coral: #dfdfdf;
       --bg-page:      #FFFFFF;
       --bg-ghost:     #F8F9FA;
       --border:       #E6E7E8;
@@ -43,17 +44,6 @@
 
     /* ─── Utility ───────────────────────────────────────────────────── */
     .container { max-width: 1100px; margin: 0 auto; padding: 0 2rem; }
-    .tag {
-      display: inline-block;
-      background: var(--accent-coral);
-      color: var(--text-main);
-      font-size: 0.65rem;
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      padding: 3px 10px;
-      border-radius: 20px;
-    }
     .section-label {
       font-family: var(--font-ui);
       font-size: var(--size-label);
@@ -79,22 +69,14 @@
     nav.scrolled { box-shadow: 0 2px 20px rgba(43,58,79,0.08); }
     .nav-inner {
       display: flex; align-items: center; justify-content: space-between;
-      padding: 0.9rem 2rem;
+      padding: 0.1rem 2rem;
       max-width: 1100px; margin: 0 auto;
     }
     .nav-logo {
-      display: flex; align-items: center; gap: 0.6rem;
+      display: flex; align-items: center; gap: 0.5rem;
       text-decoration: none;
     }
-    .nav-logo img { height: 36px; width: auto; }
-    .nav-logo-text {
-      font-family: var(--font-display);
-      font-size: 1.4rem;
-      font-weight: 700;
-      color: var(--text-main);
-      line-height: 1;
-    }
-    .nav-logo-text span { color: var(--logo-blue); }
+    .nav-logo img { height: 70px; width: auto; }
     .nav-links {
       display: flex; align-items: center; gap: 2rem;
       list-style: none;
@@ -118,20 +100,6 @@
     }
     .nav-links a:hover { color: var(--logo-blue); }
     .nav-links a:hover::after { transform: scaleX(1); }
-    .btn-order {
-      background: var(--text-main);
-      color: #fff;
-      font-size: 0.75rem;
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      padding: 0.55rem 1.4rem;
-      border-radius: 30px;
-      text-decoration: none;
-      transition: background 0.2s, transform 0.2s;
-    }
-    .btn-order:hover { background: var(--logo-blue); transform: translateY(-1px); }
-
     /* hamburger */
     .hamburger {
       display: none; flex-direction: column; gap: 5px;
@@ -140,7 +108,7 @@
     .hamburger span {
       display: block; width: 24px; height: 2px;
       background: var(--text-main); border-radius: 2px;
-      transition: all 0.3s;
+      transition: transform 0.3s, opacity 0.3s;
     }
     .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
     .hamburger.open span:nth-child(2) { opacity: 0; }
@@ -164,55 +132,55 @@
       min-height: 100vh;
       display: flex; flex-direction: column; justify-content: center;
       padding-top: 80px;
-      background: linear-gradient(150deg, #ffffff 0%, #f0f8ff 40%, #daeeff 100%);
       position: relative;
       overflow: hidden;
     }
 
+
+    
     /* decorative blobs */
+    /* z-index ladder: video(0) → overlay(1) → content(2) */
     #home::before {
       content: '';
-      position: absolute; top: -120px; right: -120px;
-      width: 500px; height: 500px;
-      background: radial-gradient(circle, rgba(135,206,235,0.25) 0%, transparent 70%);
-      border-radius: 50%;
-      pointer-events: none;
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.35);
+      z-index: 1;
     }
-    #home::after {
-      content: '';
-      position: absolute; bottom: -80px; left: -80px;
-      width: 400px; height: 400px;
-      background: radial-gradient(circle, rgba(255,173,173,0.2) 0%, transparent 70%);
-      border-radius: 50%;
-      pointer-events: none;
+
+    .hero-video {
+      position: absolute;
+      top: 50%; left: 50%;
+      width: 100vh;
+      height: 100vw;
+      transform: translate(-50%, -50%) rotate(90deg);
+      object-fit: cover;
+      z-index: 0;
     }
 
     .hero-inner {
-      display: grid; grid-template-columns: 1fr 1fr;
+      display: grid; grid-template-columns: 1fr;
       align-items: center; gap: 4rem;
       padding: 4rem 2rem;
       max-width: 1100px; margin: 0 auto;
-      position: relative; z-index: 1;
+      position: relative; z-index: 2;
     }
 
     .hero-kicker {
       display: inline-flex; align-items: center; gap: 0.5rem;
       font-size: var(--size-label); font-weight: 600;
       letter-spacing: 0.1em; text-transform: uppercase;
-      color: var(--logo-blue); margin-bottom: 1rem;
+      color: #ffffff;
+      margin-bottom: 1rem;
     }
-    .hero-kicker::before {
-      content: '';
-      display: inline-block; width: 28px; height: 2px;
-      background: var(--logo-blue);
-    }
+
 
     .hero-headline {
       font-family: var(--font-secondary);
       font-size: clamp(2.8rem, 6vw, 4.5rem);
       font-weight: 500;
       line-height: 1.1;
-      color: var(--text-main);
+      color: #ffffff;
       margin-bottom: 1.25rem;
     }
     .hero-headline em {
@@ -223,308 +191,163 @@
     .hero-sub {
       font-size: 0.9rem;
       line-height: 1.75;
-      color: #556070;
+      color: rgba(255, 255, 255, 0.85);
       max-width: 420px;
       margin-bottom: 2rem;
     }
 
-    .hero-ctas { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
-    .btn-primary {
+    .hero-ctas {
+      display: flex;
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .btn-primary_1 {
+      display: inline-flex; align-items: center;
       background: var(--text-main);
       color: #fff;
       font-size: 0.78rem;
       font-weight: 600;
       letter-spacing: 0.08em;
-      text-transform: uppercase;
       padding: 0.8rem 2rem;
       border-radius: 30px;
       text-decoration: none;
       transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
       box-shadow: 0 4px 16px rgba(43,58,79,0.18);
     }
-    .btn-primary:hover {
+    .btn-primary_1:hover {
       background: var(--logo-blue);
       transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(135,206,235,0.35);
+      box-shadow: 0 8px 24px rgba(38, 40, 41, 0.35);
     }
-    .btn-ghost {
-      font-size: 0.78rem; font-weight: 600;
-      letter-spacing: 0.08em; text-transform: uppercase;
-      color: var(--text-main); text-decoration: none;
-      display: flex; align-items: center; gap: 0.4rem;
-      transition: color 0.2s;
-    }
-    .btn-ghost:hover { color: var(--logo-blue); }
-    .btn-ghost svg { transition: transform 0.2s; }
-    .btn-ghost:hover svg { transform: translateX(4px); }
+    
 
-    /* Hero visual */
-    .hero-visual {
-      display: flex; justify-content: center; align-items: center;
-      position: relative;
-    }
-    .hero-card-stack { position: relative; width: 320px; height: 380px; }
+    /* ─── Flavours ──────────────────────────────────────────────────── */
 
-    .hcard {
-      position: absolute;
-      background: #fff;
-      border-radius: 24px;
-      padding: 1.5rem;
-      box-shadow: 0 8px 40px rgba(43,58,79,0.1);
-    }
-    .hcard-main {
-      width: 260px; height: 300px;
-      top: 40px; left: 30px;
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      gap: 0.75rem;
-      background: linear-gradient(135deg, #fff 0%, #f0f8ff 100%);
-      border: 1.5px solid var(--border);
-    }
-    .hcard-main .ice-emoji {
-      font-size: 5rem; line-height: 1;
-      animation: float 3s ease-in-out infinite;
-    }
-    @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50%       { transform: translateY(-10px); }
-    }
-    .hcard-main-label {
-      font-family: var(--font-secondary);
-      font-size: 1.4rem; font-weight: 700;
-      color: var(--text-main);
-    }
-    .hcard-main-sub {
-      font-size: 0.7rem; color: #8a9ab0;
-      letter-spacing: 0.06em; text-transform: uppercase;
-    }
-
-    .hcard-protein {
-      top: 10px; right: 0px;
-      background: var(--accent-coral);
-      border-radius: 16px; padding: 0.8rem 1.1rem;
-      display: flex; flex-direction: column; align-items: center;
-      box-shadow: 0 4px 16px rgba(255,173,173,0.4);
-    }
-    .hcard-protein .pnum {
-      font-family: var(--font-secondary);
-      font-size: 1.8rem; font-weight: 700;
-      color: var(--text-main); line-height: 1;
-    }
-    .hcard-protein .plabel {
-      font-size: 0.65rem; font-weight: 600; color: #9a5555;
-      text-transform: uppercase; letter-spacing: 0.06em;
-    }
-
-    .hcard-tag {
-      bottom: 20px; left: 0;
-      background: #fff;
-      border-radius: 12px; padding: 0.5rem 1rem;
-      box-shadow: 0 4px 16px rgba(43,58,79,0.1);
-      border: 1px solid var(--border);
-    }
-    .hcard-tag .ttext {
-      font-size: 0.72rem; font-weight: 600;
-      color: var(--text-main);
-    }
-    .hcard-tag .ttext span { color: var(--logo-blue); }
-
-    /* ─── Why Section ───────────────────────────────────────────────── */
-    #why {
-      background: var(--bg-ghost);
-      padding: 5rem 0;
-    }
-    .why-grid {
-      display: grid; grid-template-columns: repeat(3, 1fr);
-      gap: 2rem; margin-top: 3rem;
-    }
-    .why-card {
-      background: #fff;
-      border-radius: 20px;
-      padding: 2rem 1.75rem;
-      border: 1px solid var(--border);
-      transition: transform 0.25s, box-shadow 0.25s;
-    }
-    .why-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 12px 32px rgba(43,58,79,0.08);
-    }
-    .why-icon {
-      width: 52px; height: 52px;
-      background: linear-gradient(135deg, #daeeff, #f0f8ff);
-      border-radius: 14px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.5rem; margin-bottom: 1rem;
-    }
-    .why-title {
-      font-family: var(--font-secondary);
-      font-size: 1.3rem; font-weight: 700;
-      color: var(--text-main); margin-bottom: 0.5rem;
-    }
-    .why-desc {
-      font-size: var(--size-body);
-      line-height: 1.7; color: #6a7c90;
-    }
-
-    /* ─── Products ──────────────────────────────────────────────────── */
-    #products {
+    #flavours {
       background: var(--bg-page);
-      padding: 6rem 0;
-    }
-    .products-header { text-align: center; margin-bottom: 4rem; }
-    .products-header h2 {
-      font-family: var(--font-display);
-      font-size: var(--size-h1);
-      color: var(--text-main);
-      margin-top: 0.5rem;
-    }
-    .products-header p {
-      font-size: var(--size-body);
-      color: #6a7c90; margin-top: 0.75rem; line-height: 1.7;
-    }
-
-    .product-category {
-      margin-bottom: 3.5rem;
-    }
-    .category-title {
-      font-family: var(--font-display);
-      font-size: var(--size-h1);
-      color: var(--text-main);
-      padding-bottom: 0.75rem;
-      border-bottom: 2px solid var(--border);
-      margin-bottom: 2rem;
-      display: flex; align-items: center; gap: 0.75rem;
-    }
-    .category-title span { color: var(--logo-blue); }
-
-    .products-grid {
-      display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 1.5rem;
-    }
-    .product-card {
-      background: var(--bg-ghost);
-      border-radius: 20px;
-      padding: 1.75rem;
-      border: 1px solid var(--border);
-      transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
-      position: relative;
+      padding: 0;
+      height: 100vh;
       overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
     }
-    .product-card::before {
-      content: '';
-      position: absolute; top: 0; left: 0; right: 0;
-      height: 3px;
-      background: linear-gradient(90deg, var(--logo-blue), var(--accent-coral));
-      opacity: 0; transition: opacity 0.25s;
-    }
-    .product-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 12px 32px rgba(43,58,79,0.1);
-      border-color: #cce5f5;
-    }
-    .product-card:hover::before { opacity: 1; }
 
-    .product-num {
-      font-family: var(--font-display);
-      font-size: 0.85rem; font-weight: 700;
-      color: var(--logo-blue);
-      letter-spacing: 0.04em;
-      margin-bottom: 0.2rem;
+    .fl-wrapper {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      width: 500px;
     }
-    .product-name {
-      font-family: var(--font-display);
-      font-size: var(--size-h2);
+
+    /* Stacked title sections — all absolutely on top of each other */
+    .fl-heading {
+      position: relative;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 36px;
+      min-height: 130px;
+      opacity: 0; /* JS reveals after setup */
+    }
+
+    .fl-title-section {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 100%;
+      text-align: center;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .fl-pre-title {
+      font-family: var(--font-ui);
+      font-size: 0.72rem;
       font-weight: 700;
-      color: var(--text-main);
-      margin-bottom: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--logo-blue);
+      margin-bottom: 0.35rem;
+      opacity: 0;
     }
 
-    .product-base {
-      margin-bottom: 1rem;
-    }
-    .product-base-label {
-      font-family: var(--font-ui);
-      font-size: var(--size-label);
-      font-weight: 600;
-      text-decoration: underline;
-      color: var(--text-main);
-      text-transform: capitalize;
-      margin-bottom: 0.3rem;
-    }
-    .product-base-text {
-      font-size: var(--size-body);
-      color: #6a7c90;
-      line-height: 1.6;
-    }
-
-    .product-macros {
-      display: flex; align-items: center; gap: 0.5rem;
-      flex-wrap: wrap;
-    }
-    .macro-label {
-      font-family: var(--font-ui);
-      font-size: var(--size-label);
-      font-weight: 600;
-      text-decoration: underline;
-      color: var(--text-main);
-    }
-    .macro-chip {
-      background: #fff;
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 0.25rem 0.75rem;
-      font-size: var(--size-body);
-      color: var(--text-main);
+    .fl-title {
+      font-family: var(--font-secondary);
+      font-size: clamp(2.4rem, 5.5vw, 4.5rem);
       font-weight: 500;
-    }
-    .macro-chip.protein {
-      background: linear-gradient(135deg, #daeeff, #c8e8f8);
-      border-color: #b0d8f0;
-      color: #2B3A4F; font-weight: 600;
-    }
-
-    .product-price {
-      margin-top: 1.25rem;
-      padding-top: 1rem;
-      border-top: 1px solid var(--border);
-      display: flex; align-items: center; justify-content: space-between;
-    }
-    .price-amount {
-      font-family: var(--font-display);
-      font-size: 1.5rem; font-weight: 700;
+      display: flex;
+      gap: 6px;
+      justify-content: center;
+      overflow: visible; /* clip is on .fl-clip wrappers so long titles don't get cut */
       color: var(--text-main);
+      margin: 0;
     }
-    .price-unit { font-size: var(--size-small); color: #8a9ab0; }
-    .btn-add {
-      background: var(--text-main);
-      color: #fff;
-      border: none; cursor: pointer;
-      width: 36px; height: 36px;
-      border-radius: 50%;
-      font-size: 1.2rem; line-height: 1;
-      display: flex; align-items: center; justify-content: center;
-      transition: background 0.2s, transform 0.2s;
-    }
-    .btn-add:hover { background: var(--logo-blue); transform: scale(1.1); }
 
-    .replacements-box {
-      background: linear-gradient(135deg, #fef8f8, #fff5f5);
-      border: 1px solid #ffd9d9;
-      border-radius: 16px;
-      padding: 1.25rem 1.75rem;
-      margin-top: 2.5rem;
-      display: flex; align-items: flex-start; gap: 0.75rem;
+    /* Each word gets its own clip container so the h2 can be as wide as needed */
+    .fl-clip {
+      display: inline-block;
+      overflow: hidden;
+      line-height: 1.15;
+      flex-shrink: 0; /* prevent flex from compressing the clip and cutting text */
     }
-    .replacements-box .r-icon { font-size: 1.1rem; margin-top: 1px; }
-    .replacements-box .r-title {
-      font-size: var(--size-label); font-weight: 600;
-      color: var(--text-main); margin-bottom: 0.3rem;
+
+    /* Each span starts below its overflow clip, slides up on reveal */
+    .fl-t1, .fl-t2 {
+      display: inline-block;
+      transform: translateY(100%);
+      opacity: 0;
     }
-    .replacements-box .r-text {
-      font-size: var(--size-small);
-      color: #9a7070; line-height: 1.6;
+
+    /* Horizontal film strip — overflow visible so items off-screen are clipped by section */
+    .fl-items {
+      display: flex;
+      gap: 160px;
+      align-items: center;
+      overflow: visible;
+      position: relative;
+      flex-shrink: 0;
+      align-self: flex-start; /* must NOT be centered — card 0 must align to wrapper left so GSAP x=0 shows card 0 */
     }
-    .replacements-box .r-text span { font-weight: 600; color: var(--text-main); }
+
+    .fl-item {
+      width: 500px;
+      min-width: 500px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .fl-item-name { display: none; } /* mobile only */
+
+    .fl-image {
+      transform-origin: center;
+      display: block;
+      width: 360px;
+      height: 360px;
+      flex-shrink: 0;
+    }
+
+    .fl-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+
+    /* Chrysanthemum has extra whitespace padding in the source image — scale up to match visual weight of other scoops */
+    .fl-item:nth-child(5) .fl-image img {
+      transform: scale(1.35);
+    }
+
 
     /* ─── Contact ───────────────────────────────────────────────────── */
     #contact {
@@ -545,10 +368,6 @@
     }
     .contact-info h2 em {
       font-style: normal; color: var(--logo-blue);
-    }
-    .contact-info p {
-      font-size: 0.85rem; line-height: 1.8;
-      color: #556070; margin-bottom: 2rem;
     }
     .contact-cards {
       display: flex; flex-direction: column; gap: 1rem;
@@ -616,10 +435,7 @@
     .footer-logo {
       display: flex; align-items: center; gap: 0.5rem;
     }
-    .footer-logo-text {
-      font-family: var(--font-display);
-      font-size: 1.4rem; font-weight: 700; color: #fff;
-    }
+    .footer-logo img { height: 100px; filter: brightness(0) invert(1) opacity(0.7); }
     .footer-tagline {
       font-size: var(--size-small); color: rgba(255,255,255,0.5);
       letter-spacing: 0.08em; text-transform: uppercase;
@@ -644,17 +460,39 @@
 
     /* ─── Responsive ─────────────────────────────────────────────────── */
     @media (max-width: 900px) {
-      .nav-links, .btn-order { display: none; }
+      .nav-links { display: none; }
       .hamburger { display: flex; }
-      .hero-inner { grid-template-columns: 1fr; text-align: center; gap: 2rem; }
+      .hero-inner { text-align: center; gap: 2rem; }
       .hero-sub { max-width: 100%; }
       .hero-ctas { justify-content: center; }
-      .hero-visual { display: none; }
-      .why-grid { grid-template-columns: 1fr; }
       .contact-inner { grid-template-columns: 1fr; gap: 3rem; }
+      .container { padding: 0 0.5rem; }
+
+      /* Hero video: drop the rotate trick, let object-fit:cover fill portrait viewport */
+      .hero-video {
+        width: 100vw;
+        height: 100vh;
+        transform: translate(-50%, -50%);
+      }
+
+      /* Flavours: GSAP scroll → horizontal carousel (same mechanic as desktop) */
+      .fl-wrapper { width: 100vw; overflow: hidden; }
+      .fl-items { gap: 0; }
+      .fl-item { width: 100vw; min-width: 100vw; padding: 0; background: transparent; border-radius: 0; }
+      .fl-item-name {
+        display: block;
+        font-family: var(--font-secondary);
+        font-size: 1rem; font-weight: 600;
+        color: var(--text-main);
+        text-align: center;
+        padding-top: 0.75rem;
+      }
+      .fl-image { width: 65vw; height: 65vw; }
+      .fl-image img { width: 100%; height: 100%; object-fit: contain; }
+      .fl-title { font-size: clamp(1.8rem, 8vw, 3rem); }
+      .fl-heading { min-height: 110px; }
     }
     @media (max-width: 600px) {
-      .products-grid { grid-template-columns: 1fr; }
       .hero-headline { font-size: 2.4rem; }
     }
 
@@ -698,17 +536,14 @@
   <nav id="navbar">
     <div class="nav-inner">
       <a href="#home" class="nav-logo">
-        <img src="../brand_assets/logo_reference.png" alt="Lean &amp; Loaded logo" />
-        <span class="nav-logo-text">lean <span>&amp;</span> loaded</span>
+        <img src="assets/logo.png" alt="Lean & Loaded logo" />
       </a>
 
       <ul class="nav-links">
         <li><a href="#home">Home</a></li>
-        <li><a href="#products">Products</a></li>
+        <li><a href="#flavours">Menu</a></li>
         <li><a href="#contact">Contact</a></li>
       </ul>
-
-      <a href="YOUR_GOOGLE_FORM_LINK_HERE" class="btn-order" target="_blank" rel="noopener">Order Now</a>
 
       <div class="hamburger" id="hamburger" aria-label="Menu">
         <span></span><span></span><span></span>
@@ -716,246 +551,111 @@
     </div>
     <div class="mobile-menu" id="mobile-menu">
       <a href="#home"     onclick="closeMobile()">Home</a>
-      <a href="#products" onclick="closeMobile()">Products</a>
+      <a href="#flavours" onclick="closeMobile()">Menu</a>
       <a href="#contact"  onclick="closeMobile()">Contact Us</a>
-      <a href="YOUR_GOOGLE_FORM_LINK_HERE" target="_blank" rel="noopener" onclick="closeMobile()">Order Now</a>
     </div>
   </nav>
 
   <!-- ── HERO ────────────────────────────────────────────────────── -->
   <section id="home">
+
+    <video autoplay muted loop playsinline webkit-playsinline class="hero-video">
+      <source src="assets/hero-bg.mp4" type="video/mp4">
+    </video>
+
     <div class="hero-inner">
       <div class="hero-text">
-        <div class="hero-kicker">Made in the heart of Punggol</div>
+        <div class="hero-kicker">Only 8 mins away from Meridian LRT</div>
         <h1 class="hero-headline">
-          Ice Cream that<br />
-          loves you <em>back</em>
+          A snack with <em>no strings attached</em>
         </h1>
         <p class="hero-sub">
-          High-protein, zero added sugar frozen treats for gym &amp; fitness enthusiasts, health conscious individuals, or anyone who just wants to enjoy without the guilt.
+          Made to order high-protein ice cream with zero added sugar. Pre-order now.
         </p>
         <div class="hero-ctas">
-          <a href="#products" class="btn-primary">Explore the Menu</a>
-          <a href="YOUR_GOOGLE_FORM_LINK_HERE" class="btn-ghost" target="_blank" rel="noopener">
-            Order Now
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-              <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
+          <a href="https://forms.gle/1BRvYBi991Q2vhBQ9" class="btn-primary_1" target="_blank" rel="noopener">
+            Order Here
           </a>
         </div>
       </div>
+    </div>
 
-      <div class="hero-visual">
-        <div class="hero-card-stack">
-          <div class="hcard hcard-main">
-            <div class="ice-emoji">🍦</div>
-            <div class="hcard-main-label">Protein Ice Cream</div>
-            <div class="hcard-main-sub">Made with Rokeby Milk</div>
-          </div>
-          <div class="hcard hcard-protein">
-            <span class="pnum">40g</span>
-            <span class="plabel">Protein</span>
-          </div>
-          <div class="hcard hcard-tag">
-            <span class="ttext">Made with <span>♥</span> in Punggol</span>
-          </div>
+  </section>
+
+
+  <!-- ── Flavours ─────────────────────────────────────────────────── -->
+  <section id="flavours">
+    <div class="fl-wrapper" id="flWrapper">
+
+      <!-- Stacked title sections, one per flavour (desktop animated) -->
+      <div class="fl-heading" id="flHeading">
+        <div class="fl-title-section">
+          <p class="fl-pre-title">Chocolate · Banana</p>
+          <h2 class="fl-title"><span class="fl-clip"><span class="fl-t1">Choco</span></span><span class="fl-clip"><span class="fl-t2">nana</span></span></h2>
+        </div>
+        <div class="fl-title-section">
+          <p class="fl-pre-title">Peanut · Banana</p>
+          <h2 class="fl-title"><span class="fl-clip"><span class="fl-t1">Peanut</span></span><span class="fl-clip"><span class="fl-t2"> Banana</span></span></h2>
+        </div>
+        <div class="fl-title-section">
+          <p class="fl-pre-title">Keto · Coffee</p>
+          <h2 class="fl-title"><span class="fl-clip"><span class="fl-t1">Keto</span></span><span class="fl-clip"><span class="fl-t2"> Avocoffee</span></span></h2>
+        </div>
+        <div class="fl-title-section">
+          <p class="fl-pre-title">Soy · Classic</p>
+          <h2 class="fl-title"><span class="fl-clip"><span class="fl-t1">Tau</span></span><span class="fl-clip"><span class="fl-t2"> Huey</span></span></h2>
+        </div>
+        <div class="fl-title-section">
+          <p class="fl-pre-title">Floral · Herbal</p>
+          <h2 class="fl-title"><span class="fl-clip"><span class="fl-t1">Chrysan</span></span><span class="fl-clip"><span class="fl-t2">themum</span></span></h2>
         </div>
       </div>
+
+      <!-- Film strip (GSAP translates horizontally on both desktop and mobile) -->
+      <div class="fl-items" id="flItems">
+        <div class="fl-item">
+          <div class="fl-image"><img src="assets/choconana.png" alt="Choconana" /></div>
+          <span class="fl-item-name">Choconana</span>
+        </div>
+        <div class="fl-item">
+          <div class="fl-image"><img src="assets/peanutnana.png" alt="Peanut Banana" /></div>
+          <span class="fl-item-name">Peanut Banana</span>
+        </div>
+        <div class="fl-item">
+          <div class="fl-image"><img src="assets/avocado.png" alt="Keto Avocoffee" /></div>
+          <span class="fl-item-name">Keto Avocoffee</span>
+        </div>
+        <div class="fl-item">
+          <div class="fl-image"><img src="assets/tauhuey.png" alt="Tau Huey" /></div>
+          <span class="fl-item-name">Tau Huey</span>
+        </div>
+        <div class="fl-item">
+          <div class="fl-image"><img src="assets/chrysanthemum.png" alt="Chrysanthemum" /></div>
+          <span class="fl-item-name">Chrysanthemum</span>
+        </div>
+      </div>
+
     </div>
   </section>
 
-  <!-- ── WHY US ───────────────────────────────────────────────────── -->
-  <section id="why">
-    <div class="container">
-      <div class="section-label reveal">Why Lean &amp; Loaded</div>
-      <div class="why-grid">
-        <div class="why-card reveal">
-          <div class="why-icon">💪</div>
-          <div class="why-title">Protein-Packed</div>
-          <p class="why-desc">Each pint delivers up to 40g of protein — for your post-workout muscle recovery or simply just a protein fix.</p>
-        </div>
-        <div class="why-card reveal" style="transition-delay:0.1s">
-          <div class="why-icon">🥛</div>
-          <div class="why-title">Clean Ingredients</div>
-          <p class="why-desc">No added sugar in our base recipes — just real, quality ingredients.</p>
-        </div>
-        <div class="why-card reveal" style="transition-delay:0.2s">
-          <div class="why-icon">🍃</div>
-          <div class="why-title">Handcrafted Freshness</div>
-          <p class="why-desc">Made in small batches with the Ninja Creami — every pint is made to order for maximum freshness.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ── PRODUCTS ─────────────────────────────────────────────────── -->
-  <section id="products">
-    <div class="container">
-      <div class="products-header reveal">
-        <div class="section-label">The Menu</div>
-        <h2>What's Loaded Today</h2>
-        <p>Two categories, five flavours — all designed for people who refuse to choose between taste and health.</p>
-      </div>
-
-      <!-- Protein Ice Cream -->
-      <div class="product-category reveal">
-        <h3 class="category-title">
-          <span>🍦</span> Protein Ice Cream
-        </h3>
-        <div class="products-grid">
-
-          <div class="product-card">
-            <div class="product-num">#1</div>
-            <div class="product-name">Choconana</div>
-            <div class="product-base">
-              <div class="product-base-label">Base:</div>
-              <div class="product-base-text">Rokeby Protein Milk · Banana · Cocoa</div>
-            </div>
-            <div class="product-macros">
-              <span class="macro-label">Macros per tub</span>
-              <span class="macro-chip protein">40g protein</span>
-              <span class="macro-chip">~0g added sugar</span>
-            </div>
-            <div class="product-price">
-              <div>
-                <div class="price-amount">$16</div>
-                <div class="price-unit">per tub</div>
-              </div>
-              <button class="btn-add" onclick="handleOrder(this)">+</button>
-            </div>
-          </div>
-
-          <div class="product-card">
-            <div class="product-num">#2</div>
-            <div class="product-name">Peanut Banana</div>
-            <div class="product-base">
-              <div class="product-base-label">Base:</div>
-              <div class="product-base-text">Meiji High Protein Milk · Banana · Peanut Butter</div>
-            </div>
-            <div class="product-macros">
-              <span class="macro-label">Macros per tub</span>
-              <span class="macro-chip protein">40g protein</span>
-              <span class="macro-chip">~0g added sugar</span>
-            </div>
-            <div class="product-price">
-              <div>
-                <div class="price-amount">$16</div>
-                <div class="price-unit">per tub</div>
-              </div>
-              <button class="btn-add" onclick="handleOrder(this)">+</button>
-            </div>
-          </div>
-
-        </div>
-      </div>
-
-      <!-- Nice Cream -->
-      <div class="product-category reveal">
-        <h3 class="category-title">
-          <span>🌿</span> Nice Cream
-        </h3>
-        <div class="products-grid">
-
-          <div class="product-card">
-            <div class="product-num">#3</div>
-            <div class="product-name">Keto Avocoffee</div>
-            <div class="product-base">
-              <div class="product-base-label">Base:</div>
-              <div class="product-base-text">Coconut Cream · Cottage Cheese · Dates · Avocado · Cold Brew</div>
-            </div>
-            <div class="product-macros">
-              <span class="macro-label">Macros per tub</span>
-              <span class="macro-chip protein">40g protein</span>
-              <span class="macro-chip">Low carb</span>
-            </div>
-            <div class="product-price">
-              <div>
-                <div class="price-amount">$16</div>
-                <div class="price-unit">per tub</div>
-              </div>
-              <button class="btn-add" onclick="handleOrder(this)">+</button>
-            </div>
-          </div>
-
-          <div class="product-card">
-            <div class="product-num">#4</div>
-            <div class="product-name">Tau Huey</div>
-            <div class="product-base">
-              <div class="product-base-label">Base:</div>
-              <div class="product-base-text">Donki Silken Tofu · Cottage Cheese · Dates · Ginger</div>
-            </div>
-            <div class="product-macros">
-              <span class="macro-label">Macros per tub</span>
-              <span class="macro-chip protein">40g protein</span>
-              <span class="macro-chip">Plant-forward</span>
-            </div>
-            <div class="product-price">
-              <div>
-                <div class="price-amount">$16</div>
-                <div class="price-unit">per tub</div>
-              </div>
-              <button class="btn-add" onclick="handleOrder(this)">+</button>
-            </div>
-          </div>
-
-          <div class="product-card">
-            <div class="product-num">#5</div>
-            <div class="product-name">Chrysanthemum</div>
-            <div class="product-base">
-              <div class="product-base-label">Base:</div>
-              <div class="product-base-text">Meiji High Protein Milk · Maple Allulose · Chrysanthemum Tea</div>
-            </div>
-            <div class="product-macros">
-              <span class="macro-label">Macros per tub</span>
-              <span class="macro-chip protein">40g protein</span>
-              <span class="macro-chip">~0g added sugar</span>
-            </div>
-            <div class="product-price">
-              <div>
-                <div class="price-amount">$16</div>
-                <div class="price-unit">per tub</div>
-              </div>
-              <button class="btn-add" onclick="handleOrder(this)">+</button>
-            </div>
-          </div>
-
-        </div>
-      </div>
-
-      <!-- Replacements -->
-      <div class="replacements-box reveal">
-        <span class="r-icon">✦</span>
-        <div>
-          <div class="r-title">Customise Your Order</div>
-          <p class="r-text">
-            <span>+$2</span> — Upgrade to Rokeby Farms Protein Milk &nbsp;·&nbsp;
-            <span>+$2</span> — Swap to Monk Fruit / Stevia sweetener
-          </p>
-        </div>
-      </div>
-    </div>
-  </section>
 
   <!-- ── CONTACT ───────────────────────────────────────────────────── -->
   <section id="contact">
     <div class="container">
       <div class="contact-inner">
         <div class="contact-info reveal">
-          <div class="section-label">Contact Us</div>
+          <div class="section-label">Where to find us?</div>
           <h2>
             Let's get you<br />
             <em>loaded up.</em>
           </h2>
-          <p>
-            Pre-orders only, reach out to us via our socials (telegram, instagram, tiktok).
-          </p>
 
           <div class="contact-cards">
             <a href="https://t.me/leanandloaded" class="contact-card" target="_blank" rel="noopener">
-              <div class="contact-card-icon tg">✈️</div>
+              <div class="contact-card-icon tg">🫶🏻</div>
               <div class="contact-card-text">
                 <strong>Telegram</strong>
-                <span>Join our tele channel — DM us here</span>
+                <span>Notifications & Updates</span>
               </div>
             </a>
             <a href="https://instagram.com/leanandloaded.sg" class="contact-card" target="_blank" rel="noopener">
@@ -986,7 +686,7 @@
             allowfullscreen=""
             loading="lazy"
             referrerpolicy="no-referrer-when-downgrade"
-            title="Lean &amp; Loaded location — 174C Edgefield Plains S823174"
+            title="Lean & Loaded location — 174C Edgefield Plains S823174"
           ></iframe>
         </div>
       </div>
@@ -997,29 +697,130 @@
   <footer>
     <div class="footer-inner">
       <div class="footer-logo">
-        <span class="footer-logo-text">lean &amp; loaded</span>
+        <img src="assets/logo.png" alt="Lean & Loaded logo" />
       </div>
       <p class="footer-tagline">Protein-packed. Guilt-free. Made in the heart of Punggol.</p>
       <ul class="footer-links">
         <li><a href="#home">Home</a></li>
-        <li><a href="#products">Menu</a></li>
+        <li><a href="#flavours">Menu</a></li>
         <li><a href="#contact">Contact</a></li>
       </ul>
       <p class="footer-copy">
-        &copy; 2026 Lean &amp; Loaded. All rights reserved. Singapore Home-Based Business.
+        © 2026 Lean & Loaded. All rights reserved. Singapore Home-Based Business.
       </p>
     </div>
   </footer>
 
   <!-- ── FLOATING TELEGRAM ─────────────────────────────────────────── -->
-  <a href="https://t.me/leanandloaded" class="fab-tg" target="_blank" rel="noopener" aria-label="Chat with us on Telegram">
+  <a href="https://t.me/leanandloaded" class="fab-tg" target="_blank" rel="noopener" aria-label="Order on Telegram">
     <svg viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg">
       <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L7.446 14.11l-2.95-.924c-.64-.203-.658-.64.135-.954l11.566-4.458c.537-.194 1.006.131.697.447z"/>
     </svg>
   </a>
 
+
+  <!-- ── GSAP SCRIPTS ────────────────────────────────────────────────────── -->
+   <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
+   <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/ScrollTrigger.min.js"></script>
+
+
   <!-- ── SCRIPTS ────────────────────────────────────────────────────── -->
   <script>
+    gsap.registerPlugin(ScrollTrigger);
+
+    const isMobile = window.matchMedia("(max-width: 900px)").matches;
+
+    // ── Flavours: pinned scroll carousel (desktop + mobile) ──────────
+    const flSection  = document.querySelector("#flavours");
+    const flItems    = document.querySelector("#flItems");
+    const flHeading  = document.querySelector("#flHeading");
+    const flImages   = document.querySelectorAll(".fl-image");
+    const titleSections = flHeading ? Array.from(flHeading.querySelectorAll(".fl-title-section")) : [];
+
+    const NUM_CARDS = flImages.length;   // 5
+    const ITEM_W    = isMobile ? window.innerWidth : 500;   // full-vw on mobile, 500px on desktop
+    const GAP       = isMobile ? 0 : 160;                   // no gap between full-width mobile cards
+
+    // Animate a card's title into view
+    function showCard(i) {
+      const sec = titleSections[i];
+      if (!sec) return;
+      gsap.set(sec, { opacity: 1 });
+      const pre = sec.querySelector(".fl-pre-title");
+      const t1  = sec.querySelector(".fl-t1");
+      const t2  = sec.querySelector(".fl-t2");
+      if (pre) { gsap.killTweensOf(pre); gsap.fromTo(pre, { opacity: 0 },            { opacity: 1, duration: 0.5, ease: "power2.out" }); }
+      if (t1)  { gsap.killTweensOf(t1);  gsap.fromTo(t1,  { opacity: 0, y: "100%" }, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }); }
+      if (t2)  { gsap.killTweensOf(t2);  gsap.fromTo(t2,  { opacity: 0, y: "100%" }, { opacity: 1, y: 0, duration: 0.5, delay: 0.15, ease: "power2.out" }); }
+    }
+
+    // Animate a card's title out
+    function hideCard(i) {
+      const sec = titleSections[i];
+      if (!sec) return;
+      const pre = sec.querySelector(".fl-pre-title");
+      const t1  = sec.querySelector(".fl-t1");
+      const t2  = sec.querySelector(".fl-t2");
+      if (pre) { gsap.killTweensOf(pre); gsap.to(pre, { opacity: 0, duration: 0.4, ease: "power2.out" }); }
+      if (t1)  { gsap.killTweensOf(t1);  gsap.to(t1,  { opacity: 0, y: "-100%", duration: 0.4, ease: "power2.out" }); }
+      if (t2)  { gsap.killTweensOf(t2);  gsap.to(t2,  { opacity: 0, y: "-100%", duration: 0.4, delay: 0.1, ease: "power2.out",
+                   onComplete: () => gsap.set(sec, { opacity: 0 }) }); }
+    }
+
+    if (flSection && flItems) {
+      // Snap to each card position evenly spaced 0 → 1
+      const snapPoints = Array.from({ length: NUM_CARDS }, (_, i) => i / (NUM_CARDS - 1));
+
+      // Hide all titles/descs; JS will reveal card 0 immediately
+      gsap.set(flHeading, { opacity: 1 });
+      titleSections.forEach(sec => {
+        gsap.set(sec, { opacity: 0 });
+        const t1 = sec.querySelector(".fl-t1"), t2 = sec.querySelector(".fl-t2");
+        const pre = sec.querySelector(".fl-pre-title");
+        if (t1)  gsap.set(t1,  { opacity: 0, y: "100%" });
+        if (t2)  gsap.set(t2,  { opacity: 0, y: "100%" });
+        if (pre) gsap.set(pre, { opacity: 0 });
+      });
+      let activeCard = 0;
+      showCard(0);
+
+      // Build timeline: pin section, slide strip + rotate images simultaneously
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: flSection,
+          start: "top top",
+          end: () => `+=${(NUM_CARDS - 1) * window.innerHeight}`,
+          pin: true,
+          scrub: 1.5,
+          anticipatePin: 1,
+          invalidateOnRefresh: true,
+          snap: { snapTo: snapPoints, duration: 1.5, delay: 0, ease: "power2.out" },
+        }
+      });
+
+      // 1 + 2: translate strip left AND counter-rotate all images simultaneously
+      tl.to(flItems, {
+        x: () => -((NUM_CARDS - 1) * (isMobile ? window.innerWidth : ITEM_W + GAP)),
+        duration: 1,
+        ease: "none",
+        onUpdate: function () {
+          // Detect which card is now centred and swap title if changed
+          const idx = Math.min(Math.floor(this.progress() * NUM_CARDS), NUM_CARDS - 1);
+          if (idx !== activeCard) {
+            hideCard(activeCard);
+            showCard(idx);
+            activeCard = idx;
+          }
+        }
+      }, 0);
+
+      tl.to(Array.from(flImages), {
+        rotation: -(45 * (NUM_CARDS - 1)),   // −45° per card transition
+        duration: 1,
+        ease: "none"
+      }, 0);
+    }
+
     // Navbar scroll shadow
     const navbar = document.getElementById('navbar');
     window.addEventListener('scroll', () => {
@@ -1038,6 +839,10 @@
       mobileMenu.classList.remove('open');
     }
 
+    // Force-play hero video — some mobile browsers ignore the autoplay attribute
+    const heroVideo = document.querySelector('.hero-video');
+    if (heroVideo) heroVideo.play().catch(() => {});
+
     // Scroll reveal
     const reveals = document.querySelectorAll('.reveal');
     const observer = new IntersectionObserver(
@@ -1046,16 +851,6 @@
     );
     reveals.forEach(el => observer.observe(el));
 
-    // Add-to-order button feedback
-    function handleOrder(btn) {
-      btn.textContent = '✓';
-      btn.style.background = '#25d366';
-      setTimeout(() => {
-        btn.textContent = '+';
-        btn.style.background = '';
-      }, 1800);
-      window.open('YOUR_GOOGLE_FORM_LINK_HERE', '_blank');
-    }
   </script>
 
 </body>
