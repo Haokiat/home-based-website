@@ -678,10 +678,6 @@
       return { num: next, display: '#' + String(next).padStart(4, '0') };
     }
 
-    /* ─── Telegram notification ─────────────────────────────── */
-    const TG_TOKEN   = '8758436826:AAGv_yM0q6zgcWFsA3NpcpoV6xWHWGig-co';
-    const TG_CHAT_ID = '-1003784023828';
-
     /* ─── State ─────────────────────────────────────────────── */
     const S = {
       items: Object.fromEntries(FLAVOURS.map(f => [f.id, { qty: 0, rokeby: false, stevia: false }])),
@@ -1043,7 +1039,6 @@
 
     /* ─── Telegram notification ─────────────────────────────── */
     async function notifyTelegram(items, screenshotUrl, orderNumDisplay) {
-      if (TG_CHAT_ID === 'YOUR_GROUP_CHAT_ID') return;
       const lines = [`🍦 <b>New Order ${orderNumDisplay} — Lean &amp; Loaded</b>`, '', '<b>Items:</b>'];
       items.forEach(it => {
         lines.push(`• ${it.qty}× ${esc(it.name)} — $${it.line_total}`);
@@ -1061,10 +1056,10 @@
         lines.push(`<b>Telegram:</b> <a href="https://t.me/${handle}">${esc(S.telegram)}</a>`);
       }
       if (screenshotUrl) lines.push('', `<a href="${screenshotUrl}">View payment screenshot →</a>`);
-      await fetch(`https://api.telegram.org/bot${TG_TOKEN}/sendMessage`, {
+      await fetch('/api/tele-noti', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ chat_id: TG_CHAT_ID, text: lines.join('\n'), parse_mode: 'HTML' }),
+        body: JSON.stringify({ text: lines.join('\n') }),
       }).catch(() => {});
     }
 

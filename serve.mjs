@@ -1,9 +1,18 @@
 import { createServer } from 'http';
-import { createReadStream, statSync } from 'fs';
+import { createReadStream, statSync, readFileSync } from 'fs';
 import { extname, join } from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import { networkInterfaces } from 'os';
+
+// Load .env for local development (no dotenv dependency needed)
+try {
+  const env = readFileSync(new URL('.env', import.meta.url), 'utf8');
+  for (const line of env.split('\n')) {
+    const eq = line.indexOf('=');
+    if (eq > 0) process.env[line.slice(0, eq).trim()] = line.slice(eq + 1).trim();
+  }
+} catch {}
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -29,6 +38,33 @@ const PORT = 3000;
 
 createServer((req, res) => {
   let urlPath = req.url.split('?')[0];
+
+  // Route POST /api/tele-noti to the serverless handler
+  if (req.method === 'POST' && urlPath === '/api/tele-noti') {
+    let body = '';
+    req.on('data', chunk => { body += chunk; });
+    req.on('end', async () => {
+      try {
+        const parsed = JSON.parse(body);
+        const mockReq = { body: parsed };
+        const mockRes = {
+          _status: 200,
+          status(code) { this._status = code; return this; },
+          json(data) {
+            res.writeHead(this._status, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify(data));
+          },
+        };
+        const { default: handler } = await import('./api/tele-noti.js');
+        await handler(mockReq, mockRes);
+      } catch (e) {
+        res.writeHead(500);
+        res.end('Internal Server Error');
+      }
+    });
+    return;
+  }
+
   if (urlPath === '/' || urlPath === '') urlPath = '/index.html';
 
   const filePath = join(__dirname, urlPath);
