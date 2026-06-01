@@ -7,28 +7,24 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Schoolbell&family=Teachers:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Teachers:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
 
   <style>
     /* ─── Reset & Root ─────────────────────────────────────────────── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --primary-blue: #E6E7E8;
       --logo-blue:    #87CEEB;
       --text-main:    #2B3A4F;
-      --accent-coral: #dfdfdf;
       --bg-page:      #FFFFFF;
       --bg-ghost:     #F8F9FA;
       --border:       #E6E7E8;
 
-      --size-h1:    2.25rem;
-      --size-h2:    1.75rem;
       --size-label: 0.875rem;
       --size-body:  0.8rem;
       --size-small: 0.68rem;
 
-      --font-display:   'Schoolbell', cursive;
+      --font-display:   'Teachers', sans-serif;
       --font-secondary: 'Teachers', sans-serif;
       --font-ui:        'Inter', sans-serif;
     }
@@ -496,6 +492,83 @@
       .hero-headline { font-size: 2.4rem; }
     }
 
+    /* ─── FAQ ───────────────────────────────────────────────────────── */
+    #faq {
+      background: var(--bg-ghost);
+      padding: 6rem 0;
+    }
+    .faq-inner {
+      max-width: 720px;
+      margin: 0 auto;
+    }
+    .faq-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+    .faq-header h2 {
+      font-family: var(--font-secondary);
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 700;
+      color: var(--text-main);
+      margin-top: 0.5rem;
+      line-height: 1.15;
+    }
+    .faq-header h2 em { font-style: normal; color: var(--logo-blue); }
+    .faq-list { display: flex; flex-direction: column; gap: 0.75rem; }
+    .faq-item {
+      background: var(--bg-page);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .faq-item.open {
+      border-color: var(--logo-blue);
+      box-shadow: 0 4px 16px rgba(135,206,235,0.18);
+    }
+    .faq-question {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 1rem; padding: 1.2rem 1.5rem;
+      cursor: pointer;
+      font-family: var(--font-secondary);
+      font-size: 0.95rem; font-weight: 600;
+      color: var(--text-main);
+      user-select: none;
+      transition: color 0.2s;
+    }
+    .faq-question:hover { color: var(--logo-blue); }
+    .faq-chevron {
+      width: 20px; height: 20px; flex-shrink: 0;
+      color: var(--logo-blue);
+      transition: transform 0.3s ease;
+    }
+    .faq-item.open .faq-chevron { transform: rotate(180deg); }
+    .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.35s ease; }
+    .faq-answer-inner {
+      padding: 0 1.5rem 1.25rem;
+      font-size: var(--size-body);
+      color: #5a6a7e;
+      line-height: 1.8;
+    }
+    .faq-answer-inner strong { color: var(--text-main); }
+    .faq-tabs {
+      display: flex; gap: 0.5rem; flex-wrap: wrap;
+      margin-bottom: 1.5rem;
+    }
+    .faq-tab {
+      padding: 0.45rem 1.1rem;
+      border-radius: 99px;
+      border: 1.5px solid var(--border);
+      background: transparent;
+      color: var(--text-muted);
+      font-family: var(--font-ui);
+      font-size: 0.78rem; font-weight: 600; letter-spacing: 0.03em;
+      cursor: pointer;
+      transition: border-color 0.2s, color 0.2s, background 0.2s;
+    }
+    .faq-tab:hover { border-color: var(--logo-blue); color: var(--logo-blue); }
+    .faq-tab.active { background: var(--logo-blue); border-color: var(--logo-blue); color: #fff; }
+
     /* ─── Floating Telegram ──────────────────────────────────────────── */
     .fab-tg {
       position: fixed; bottom: 2rem; right: 2rem;
@@ -543,6 +616,7 @@
         <li><a href="#home">Home</a></li>
         <li><a href="#flavours">Menu</a></li>
         <li><a href="#contact">Contact</a></li>
+        <li><a href="#faq">FAQ</a></li>
       </ul>
 
       <div class="hamburger" id="hamburger" aria-label="Menu">
@@ -553,6 +627,7 @@
       <a href="#home"     onclick="closeMobile()">Home</a>
       <a href="#flavours" onclick="closeMobile()">Menu</a>
       <a href="#contact"  onclick="closeMobile()">Contact Us</a>
+      <a href="#faq"      onclick="closeMobile()">FAQ</a>
     </div>
   </nav>
 
@@ -573,7 +648,7 @@
           Made to order high-protein ice cream with zero added sugar. Pre-order now.
         </p>
         <div class="hero-ctas">
-          <a href="https://forms.gle/1BRvYBi991Q2vhBQ9" class="btn-primary_1" target="_blank" rel="noopener">
+          <a href="order.html" class="btn-primary_1">
             Order Here
           </a>
         </div>
@@ -609,6 +684,7 @@
           <p class="fl-pre-title">Floral · Herbal</p>
           <h2 class="fl-title"><span class="fl-clip"><span class="fl-t1">Chrysan</span></span><span class="fl-clip"><span class="fl-t2">themum</span></span></h2>
         </div>
+        
       </div>
 
       <!-- Film strip (GSAP translates horizontally on both desktop and mobile) -->
@@ -682,13 +758,193 @@
         <div class="map-wrap reveal" style="transition-delay:0.15s">
           <h3>Locate Us</h3>
           <iframe
-            src="https://maps.google.com/maps?q=174C+Edgefield+Plains,+Singapore+823174&output=embed&z=16"
+            src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3988.632389361895!2d103.9079685!3d1.3970165!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31da17007538b5c7%3A0xe3adb8031c8db55e!2slean%20%26%20loaded!5e0!3m2!1sen!2ssg!4v1779461349533!5m2!1sen!2ssg"
             allowfullscreen=""
             loading="lazy"
             referrerpolicy="no-referrer-when-downgrade"
-            title="Lean & Loaded location — 174C Edgefield Plains S823174"
+            title="Lean & Loaded location"
           ></iframe>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FAQ ─────────────────────────────────────────────────────────── -->
+  <section id="faq">
+    <div class="container">
+      <div class="faq-inner">
+
+        <div class="faq-header reveal">
+          <div class="section-label">Got questions?</div>
+          <h2>We got them <em>answered</em></h2>
+        </div>
+
+        <div class="faq-tabs reveal" style="transition-delay:0.05s">
+          <button class="faq-tab active" onclick="switchFaqTab(this,'product')">Product</button>
+          <button class="faq-tab" onclick="switchFaqTab(this,'before')">Before You Order</button>
+          <button class="faq-tab" onclick="switchFaqTab(this,'ordered')">Just Ordered?</button>
+          <button class="faq-tab" onclick="switchFaqTab(this,'others')">Oops / Others</button>
+        </div>
+
+        <!-- ── Product ─────────────────────────────────────────────── -->
+        <div class="faq-panel faq-list reveal" id="faq-product" style="transition-delay:0.1s">
+
+          <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+              What do you mean no added sugar?
+              <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+            <div class="faq-answer">
+              <div class="faq-answer-inner">
+                With the exception of Chrysanthemum, our ice creams only rely on the natural sweetness of ingredients such as bananas and dates, which also provide dietary fibre.<br><br>
+                Consumed in moderation, Chrysanthemum is still diabetic friendly. It contains Allulose which has a minimal impact on blood glucose and insulin for most people.
+              </div>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+              How are your ice creams high protein?
+              <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+            <div class="faq-answer">
+              <div class="faq-answer-inner">
+                We use high protein milk on top of protein rich foods like cottage cheese, greek yogurt (not greek inspired!) and tofu made from 100% non-gmo soybeans.<br><br>
+                We also use PB Fit instead of peanut butter to maintain a primarily protein dominant macros profile.
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- ── Before You Order ────────────────────────────────────── -->
+        <div class="faq-panel faq-list" id="faq-before" style="display:none">
+
+          <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+              How do I place an order?
+              <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+            <div class="faq-answer">
+              <div class="faq-answer-inner">
+                <strong>#1</strong> Place an order on our website  — this step will require you to have a Telegram account so we can contact you and make sure your order gets to you.<br><br>
+                <strong>#2</strong> Make PayNow payment to the QR code displayed, and attach the screenshot showing transaction evidence including amount sent.<br><br>
+                <strong>#3</strong> You will be guided to Telegram to send us a summary of your order.<br><br>
+                <strong>#4</strong> Wait for our confirmation message!
+              </div>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+              How do I get free delivery?
+              <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+            <div class="faq-answer">
+              <div class="faq-answer-inner">
+                Delivery fee is $15. But if you order 4 pints we will deliver for free!
+              </div>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+              Why can't I order more than 4?
+              <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+            <div class="faq-answer">
+              <div class="faq-answer-inner">
+                Coz of capacity constraints... Guys this is a passion project &lt;3
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- ── Just Ordered? ───────────────────────────────────────── -->
+        <div class="faq-panel faq-list" id="faq-ordered" style="display:none">
+
+          <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+              How should I store my ice cream?
+              <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+            <div class="faq-answer">
+              <div class="faq-answer-inner">
+                Store in tummy, else freeze ASAP!<br><br>
+                Ideally, consume within 3 days as we use fresh ingredients, without adding preservatives &amp; binding agents.
+              </div>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+              What if I want to change my order?
+              <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+            <div class="faq-answer">
+              <div class="faq-answer-inner">
+                Please let us know through Telegram and we will try our best to accommodate within reason — we cannot un-make ice cream 😭
+              </div>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+              Why isn't my order confirmed after PayNow?
+              <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+            <div class="faq-answer">
+              <div class="faq-answer-inner">
+                Confirmation can only occur after we have checked that we have capacity to fulfil your orders — else we will refund you.
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- ── Oops / Others ───────────────────────────────────────── -->
+        <div class="faq-panel faq-list" id="faq-others" style="display:none">
+
+          <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+              Any discounts?
+              <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+            <div class="faq-answer">
+              <div class="faq-answer-inner">
+                Join our Telegram channel! We have a loyalty program coming soon!
+              </div>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+              Are the calories listed accurate?
+              <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+            <div class="faq-answer">
+              <div class="faq-answer-inner">
+                We are a home based business and do not send products for lab testing. Figures were derived from approximates based on ingredients used.<br><br>
+                For example, 100g avocado on MyFitnessPal / Ventricle Tracker is ~160 calories.
+              </div>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+              What happens if I'm late for pick up?
+              <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+            <div class="faq-answer">
+              <div class="faq-answer-inner">
+                Please let us know in advance so we can move your ice cream back to the freezer.
+              </div>
+            </div>
+          </div>
+
+        </div>
+
       </div>
     </div>
   </section>
@@ -704,6 +960,7 @@
         <li><a href="#home">Home</a></li>
         <li><a href="#flavours">Menu</a></li>
         <li><a href="#contact">Contact</a></li>
+        <li><a href="#faq">FAQ</a></li>
       </ul>
       <p class="footer-copy">
         © 2026 Lean & Loaded. All rights reserved. Singapore Home-Based Business.
@@ -842,6 +1099,39 @@
     // Force-play hero video — some mobile browsers ignore the autoplay attribute
     const heroVideo = document.querySelector('.hero-video');
     if (heroVideo) heroVideo.play().catch(() => {});
+
+    // FAQ accordion
+    function switchFaqTab(btn, panelId) {
+      document.querySelectorAll('.faq-tab').forEach(t => t.classList.remove('active'));
+      btn.classList.add('active');
+      document.querySelectorAll('.faq-item.open').forEach(item => {
+        item.classList.remove('open');
+        item.querySelector('.faq-answer').style.maxHeight = null;
+      });
+      document.querySelectorAll('.faq-panel').forEach(p => p.style.display = 'none');
+      document.getElementById('faq-' + panelId).style.display = 'flex';
+    }
+
+    function toggleFaq(el) {
+      const item = el.parentElement;
+      const answer = item.querySelector('.faq-answer');
+      const isOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item.open').forEach(i => {
+        i.classList.remove('open');
+        i.querySelector('.faq-answer').style.maxHeight = null;
+      });
+      if (!isOpen) {
+        item.classList.add('open');
+        answer.style.maxHeight = answer.scrollHeight + 'px';
+      }
+    }
+
+    // Recalculate open FAQ height on resize (content may rewrap)
+    window.addEventListener('resize', () => {
+      document.querySelectorAll('.faq-item.open .faq-answer').forEach(a => {
+        a.style.maxHeight = a.scrollHeight + 'px';
+      });
+    });
 
     // Scroll reveal
     const reveals = document.querySelectorAll('.reveal');

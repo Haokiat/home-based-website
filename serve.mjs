@@ -62,11 +62,17 @@ createServer((req, res) => {
     });
     createReadStream(filePath, { start, end }).pipe(res);
   } else {
-    res.writeHead(200, {
+    const headers = {
       'Content-Length': fileSize,
       'Content-Type':   contentType,
       'Accept-Ranges':  'bytes',
-    });
+    };
+    if (contentType.startsWith('text/html')) {
+      headers['Cache-Control'] = 'no-cache, no-store, must-revalidate';
+      headers['Pragma']        = 'no-cache';
+      headers['Expires']       = '0';
+    }
+    res.writeHead(200, headers);
     createReadStream(filePath).pipe(res);
   }
 }).listen(PORT, '0.0.0.0', () => {

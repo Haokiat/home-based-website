@@ -1,0 +1,1199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Order — Lean & Loaded</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Teachers:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --primary:    #87CEEB;
+      --primary-dk: #4aafd4;
+      --text-main:  #2B3A4F;
+      --text-muted: #7a8899;
+      --bg-page:    #F4F7FA;
+      --bg-card:    #FFFFFF;
+      --border:     #E2E8EF;
+      --font-display:   'Teachers', sans-serif;
+      --font-secondary: 'Teachers', sans-serif;
+      --font-ui:        'Inter', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font-ui);
+      color: var(--text-main);
+      background: var(--bg-page);
+      min-height: 100vh;
+    }
+
+    /* ─── Nav ────────────────────────────────────── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      box-shadow: 0 2px 20px rgba(43,58,79,0.06);
+    }
+    .nav-inner {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 2rem; max-width: 760px; margin: 0 auto;
+    }
+    .nav-logo { display: flex; align-items: center; text-decoration: none; }
+    .nav-logo img { height: 60px; width: auto; }
+    .nav-back {
+      font-size: 0.78rem; font-weight: 600; letter-spacing: 0.07em;
+      text-transform: uppercase; color: var(--text-muted);
+      text-decoration: none; display: flex; align-items: center; gap: 0.35rem;
+      transition: color 0.2s;
+    }
+    .nav-back:hover { color: var(--primary-dk); }
+
+    /* ─── Layout ─────────────────────────────────── */
+    main {
+      max-width: 680px; margin: 0 auto;
+      padding: 5.5rem 1.25rem 4rem;
+    }
+
+    /* ─── Progress ───────────────────────────────── */
+    .progress-wrap {
+      background: var(--bg-card);
+      border-radius: 14px; border: 1px solid var(--border);
+      padding: 1.25rem 1.5rem; margin-bottom: 1.25rem;
+      box-shadow: 0 1px 8px rgba(43,58,79,0.05);
+    }
+    .progress-steps { display: flex; align-items: flex-start; }
+    .p-step {
+      flex: 1; display: flex; flex-direction: column; align-items: center;
+      gap: 0.3rem; text-align: center;
+    }
+    .p-num {
+      width: 28px; height: 28px; border-radius: 50%;
+      border: 2px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.75rem; font-weight: 700;
+      color: var(--text-muted); background: #fff;
+      transition: background 0.25s, border-color 0.25s, color 0.25s;
+      flex-shrink: 0;
+    }
+    .p-step.active .p-num  { background: var(--primary); border-color: var(--primary); color: #fff; }
+    .p-step.done   .p-num  { background: var(--primary-dk); border-color: var(--primary-dk); color: #fff; }
+    .p-label {
+      font-size: 0.6rem; font-weight: 600; letter-spacing: 0.06em;
+      text-transform: uppercase; color: var(--text-muted); line-height: 1.3;
+    }
+    .p-step.active .p-label { color: var(--text-main); }
+    .p-step.done   .p-label { color: var(--primary-dk); }
+    .p-line {
+      flex: 1; height: 2px; background: var(--border);
+      margin-top: 13px; flex-shrink: 0;
+      transition: background 0.25s;
+    }
+    .p-line.done { background: var(--primary-dk); }
+
+    /* ─── Step Card ──────────────────────────────── */
+    .step-card {
+      background: var(--bg-card);
+      border-radius: 16px; border: 1px solid var(--border);
+      padding: 2rem 1.75rem;
+      box-shadow: 0 2px 16px rgba(43,58,79,0.07);
+      display: none;
+    }
+    .step-card.active { display: block; }
+
+    .step-title {
+      font-family: var(--font-display);
+      font-size: 1.9rem; color: var(--text-main);
+      margin-bottom: 0.2rem;
+    }
+    .step-sub {
+      font-size: 0.8rem; color: var(--text-muted);
+      margin-bottom: 1.75rem; line-height: 1.5;
+    }
+
+    /* ─── Field helpers ──────────────────────────── */
+    .field-label {
+      display: block; font-size: 0.7rem; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--text-muted); margin-bottom: 0.6rem;
+    }
+    .field-group { margin-bottom: 1.25rem; }
+    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+    @media (max-width: 480px) { .field-row { grid-template-columns: 1fr; } }
+
+    input[type="text"],
+    input[type="tel"],
+    textarea, select {
+      width: 100%; border: 1.5px solid var(--border);
+      border-radius: 10px; padding: 0.65rem 0.9rem;
+      font-family: var(--font-ui); font-size: 0.875rem;
+      color: var(--text-main); background: #fff; outline: none;
+      transition: border-color 0.2s;
+      -webkit-appearance: none;
+    }
+    input:focus, textarea:focus, select:focus { border-color: var(--primary); }
+    textarea { resize: vertical; min-height: 80px; }
+    .input-error { border-color: #e05252 !important; }
+    .field-err { font-size: 0.72rem; color: #e05252; margin-top: 0.3rem; display: none; }
+
+    hr.sep { border: none; border-top: 1px solid var(--border); margin: 1.5rem 0; }
+
+    /* ─── Flavour cards ──────────────────────────── */
+    .flavour-list { display: flex; flex-direction: column; gap: 0.65rem; }
+    .fl-card {
+      border: 1.5px solid var(--border); border-radius: 12px; overflow: hidden;
+      transition: border-color 0.2s;
+    }
+    .fl-card.selected { border-color: var(--primary); }
+    .fl-card-main {
+      display: flex; align-items: center; gap: 0.875rem;
+      padding: 0.8rem 1rem;
+    }
+    .fl-thumb {
+      width: 56px; height: 56px; border-radius: 50%;
+      object-fit: contain; background: var(--bg-page);
+      flex-shrink: 0;
+    }
+    .fl-info { flex: 1; min-width: 0; }
+    .fl-name {
+      font-family: var(--font-secondary); font-weight: 600;
+      font-size: 0.9rem; color: var(--text-main);
+    }
+    .fl-macros { font-size: 0.68rem; color: var(--text-muted); margin-top: 0.1rem; }
+    .fl-price { font-size: 0.72rem; font-weight: 600; color: var(--primary-dk); margin-top: 0.1rem; }
+
+    /* qty stepper */
+    .qty-wrap { display: flex; align-items: center; gap: 0.45rem; flex-shrink: 0; }
+    .qty-btn {
+      width: 28px; height: 28px; border-radius: 50%;
+      border: 1.5px solid var(--border); background: #fff;
+      font-size: 1rem; cursor: pointer; color: var(--text-main);
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.15s, border-color 0.15s, color 0.15s;
+      flex-shrink: 0;
+    }
+    .qty-btn:hover { border-color: var(--primary-dk); background: rgba(135,206,235,0.1); }
+    .qty-btn:active { background: var(--primary-dk); color: #fff; border-color: var(--primary-dk); }
+    .qty-val { width: 22px; text-align: center; font-weight: 700; font-size: 0.9rem; }
+
+    /* upgrades */
+    .fl-upgrades {
+      background: #F8FAFC; border-top: 1px solid var(--border);
+      padding: 0.6rem 1rem; display: flex; gap: 0.45rem; flex-wrap: wrap;
+    }
+    .up-pill {
+      display: inline-flex; align-items: center; gap: 0.35rem;
+      padding: 0.3rem 0.7rem; border-radius: 20px;
+      border: 1.5px solid var(--border); background: #fff;
+      cursor: pointer; font-size: 0.72rem; font-weight: 600;
+      color: var(--text-muted); user-select: none;
+      transition: border-color 0.15s, background 0.15s, color 0.15s;
+    }
+    .up-pill:hover { border-color: var(--primary); color: var(--text-main); }
+    .up-pill.on { border-color: var(--primary-dk); background: rgba(74,175,212,0.1); color: var(--primary-dk); }
+    .up-dot { font-size: 0.65rem; }
+
+    /* ─── Cart bar ───────────────────────────────── */
+    .cart-bar {
+      background: var(--text-main); color: #fff;
+      border-radius: 12px; padding: 0.8rem 1.25rem;
+      display: flex; align-items: center; justify-content: space-between;
+      margin-top: 1.25rem; transition: opacity 0.3s;
+    }
+    .cart-bar.hidden { display: none; }
+    .cart-bar-label { font-size: 0.78rem; opacity: 0.7; }
+    .cart-bar-total { font-family: var(--font-display); font-size: 1.5rem; }
+
+    /* ─── Radio options ──────────────────────────── */
+    .radio-group { display: flex; flex-direction: column; gap: 0.5rem; }
+    .radio-opt {
+      display: flex; align-items: flex-start; gap: 0.75rem;
+      padding: 0.875rem 1rem; border: 1.5px solid var(--border);
+      border-radius: 10px; cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .radio-opt:hover { border-color: var(--primary); }
+    .radio-opt.on { border-color: var(--primary-dk); background: rgba(74,175,212,0.07); }
+    .radio-dot {
+      width: 18px; height: 18px; border-radius: 50%;
+      border: 2px solid var(--border); background: #fff;
+      flex-shrink: 0; margin-top: 1px;
+      transition: border-color 0.2s, background 0.2s;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .radio-opt.on .radio-dot { border-color: var(--primary-dk); background: var(--primary-dk); }
+    .radio-dot::after {
+      content: ''; width: 6px; height: 6px;
+      border-radius: 50%; background: #fff; opacity: 0;
+      transition: opacity 0.15s;
+    }
+    .radio-opt.on .radio-dot::after { opacity: 1; }
+    .radio-lbl { font-size: 0.875rem; font-weight: 600; }
+    .radio-desc { font-size: 0.75rem; color: var(--text-muted); margin-top: 0.1rem; }
+
+    /* ─── Order summary box ──────────────────────── */
+    .summary-box {
+      background: var(--bg-page); border-radius: 12px;
+      border: 1px solid var(--border); padding: 1.25rem;
+      margin-bottom: 1.25rem;
+    }
+    .summary-hd {
+      font-size: 0.68rem; font-weight: 700; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--text-muted);
+      margin-bottom: 0.875rem;
+    }
+    .sum-row {
+      display: flex; align-items: flex-start; justify-content: space-between;
+      gap: 1rem; margin-bottom: 0.45rem;
+    }
+    .sum-item { font-size: 0.875rem; }
+    .sum-detail { font-size: 0.72rem; color: var(--text-muted); margin-top: 0.1rem; }
+    .sum-price { font-size: 0.875rem; font-weight: 600; white-space: nowrap; flex-shrink: 0; }
+    .sum-meta { font-size: 0.8rem; color: var(--text-muted); }
+    hr.sum-div { border: none; border-top: 1px dashed var(--border); margin: 0.875rem 0; }
+    .sum-total-row { display: flex; align-items: center; justify-content: space-between; }
+    .sum-total-lbl { font-weight: 700; font-size: 1rem; }
+    .sum-total-price { font-family: var(--font-display); font-size: 2rem; color: var(--primary-dk); }
+
+    /* ─── QR / payment ───────────────────────────── */
+    .qr-wrap {
+      text-align: center; padding: 1.75rem 1.25rem;
+      background: var(--bg-page); border-radius: 12px;
+      border: 1px solid var(--border); margin-bottom: 1.25rem;
+    }
+    .qr-box {
+      width: 180px; height: 180px; border-radius: 10px;
+      margin: 0 auto 1rem; overflow: hidden;
+      border: 2px dashed var(--border);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text-muted); font-size: 0.75rem;
+      text-align: center; line-height: 1.5;
+    }
+    .qr-box img { width: 100%; height: 100%; object-fit: contain; }
+    .qr-label { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.25rem; }
+    .qr-amount { font-family: var(--font-display); font-size: 2.75rem; color: var(--primary-dk); }
+    .qr-note { font-size: 0.72rem; color: var(--text-muted); margin-top: 0.25rem; }
+
+    /* ─── Buttons ────────────────────────────────── */
+    .btn-row {
+      display: flex; align-items: center; gap: 0.75rem; margin-top: 1.5rem;
+    }
+    .spacer { flex: 1; }
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      gap: 0.45rem; padding: 0.7rem 1.6rem; border-radius: 40px;
+      font-family: var(--font-ui); font-size: 0.85rem; font-weight: 600;
+      cursor: pointer; border: none; text-decoration: none;
+      transition: transform 0.12s, box-shadow 0.15s;
+    }
+    .btn:active { transform: scale(0.97); }
+    .btn-primary {
+      background: var(--primary-dk); color: #fff;
+      box-shadow: 0 4px 16px rgba(74,175,212,0.35);
+    }
+    .btn-primary:hover { box-shadow: 0 6px 22px rgba(74,175,212,0.45); }
+    .btn-ghost {
+      background: transparent; color: var(--text-muted);
+      border: 1.5px solid var(--border);
+    }
+    .btn-ghost:hover { border-color: var(--text-muted); color: var(--text-main); }
+    .btn-tg {
+      background: #229ED9; color: #fff; width: 100%;
+      box-shadow: 0 4px 16px rgba(34,158,217,0.3);
+      padding: 0.875rem 1.6rem; font-size: 0.9rem;
+    }
+    .btn-tg:hover { box-shadow: 0 6px 22px rgba(34,158,217,0.4); }
+
+    /* ─── Upload zone ────────────────────────────────────── */
+    .upload-zone {
+      border: 2px dashed var(--border); border-radius: 12px;
+      padding: 1.25rem; text-align: center; cursor: pointer;
+      margin-bottom: 1.25rem; position: relative;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .upload-zone:hover { border-color: var(--primary-dk); background: rgba(135,206,235,0.05); }
+    .upload-zone input[type="file"] {
+      position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%;
+    }
+    .upload-idle { font-size: 0.8rem; color: var(--text-muted); line-height: 1.6; }
+    .upload-idle strong { display: block; color: var(--text-main); font-size: 0.85rem; margin-bottom: 0.25rem; }
+    .upload-preview { display: none; position: relative; }
+    .proof-thumb {
+      width: 100%; max-height: 200px; object-fit: contain;
+      border-radius: 8px; display: block;
+    }
+    .proof-clear {
+      position: absolute; top: 0.5rem; right: 0.5rem;
+      background: rgba(0,0,0,0.55); color: #fff; border: none;
+      border-radius: 50%; width: 26px; height: 26px; cursor: pointer;
+      font-size: 0.8rem; display: flex; align-items: center; justify-content: center;
+    }
+
+    /* ─── Telegram notice ────────────────────────────────── */
+    .tg-notice {
+      background: rgba(34,158,217,0.1); border: 1.5px solid rgba(34,158,217,0.3);
+      border-radius: 12px; padding: 1rem 1.25rem; margin-bottom: 1.25rem;
+      font-size: 0.82rem; line-height: 1.6; color: var(--text-main);
+    }
+    .tg-notice strong { color: #1a7aaa; }
+    .tg-notice ol { padding-left: 1.25rem; margin-top: 0.4rem; }
+    .tg-notice li { margin-bottom: 0.25rem; }
+
+    /* ─── Proof thumbnail in confirmation ────────────────── */
+    .confirm-proof { margin: 0 auto 1.5rem; text-align: center; }
+    .confirm-proof img {
+      max-width: 220px; max-height: 180px; border-radius: 10px;
+      object-fit: contain; border: 1px solid var(--border);
+      box-shadow: 0 2px 12px rgba(43,58,79,0.1);
+    }
+    .confirm-proof-lbl {
+      font-size: 0.68rem; font-weight: 700; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.5rem;
+    }
+
+    /* ─── Confirmation ───────────────────────────── */
+    .confirm-wrap { text-align: center; padding-bottom: 1rem; }
+    .confirm-icon {
+      width: 64px; height: 64px; border-radius: 50%;
+      background: rgba(135,206,235,0.2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2rem; margin: 0 auto 1.25rem;
+    }
+    .confirm-h { font-family: var(--font-display); font-size: 2.2rem; margin-bottom: 0.4rem; }
+    .confirm-sub { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 2rem; line-height: 1.6; }
+
+    @media (max-width: 600px) {
+      .step-card { padding: 1.5rem 1.25rem; }
+      main { padding-top: 5rem; }
+    }
+
+    /* ─── Flatpickr overrides ───────────────────────────────── */
+    .flatpickr-calendar {
+      border-radius: 12px; border: 1px solid var(--border);
+      box-shadow: 0 8px 30px rgba(43,58,79,0.12);
+      font-family: var(--font-ui); font-size: 0.875rem;
+    }
+    .flatpickr-months { background: var(--primary); border-radius: 12px 12px 0 0; }
+    .flatpickr-months .flatpickr-month { background: transparent; }
+    .flatpickr-current-month {
+      font-family: var(--font-ui); font-size: 0.9rem !important;
+      font-weight: 600; color: var(--text-main);
+    }
+    .flatpickr-current-month .flatpickr-monthDropdown-months {
+      font-family: var(--font-ui); font-size: 0.9rem; font-weight: 600;
+      color: var(--text-main); background: transparent;
+    }
+    .flatpickr-current-month input.cur-year {
+      font-family: var(--font-ui); font-size: 0.9rem !important;
+      font-weight: 600; color: var(--text-main);
+    }
+    .flatpickr-months .flatpickr-prev-month,
+    .flatpickr-months .flatpickr-next-month { fill: var(--text-main); top: 4px; }
+    .flatpickr-months .flatpickr-prev-month:hover svg,
+    .flatpickr-months .flatpickr-next-month:hover svg { fill: var(--primary-dk); }
+    .flatpickr-weekdays { background: var(--primary); }
+    span.flatpickr-weekday {
+      background: transparent; color: var(--text-main);
+      font-family: var(--font-ui); font-weight: 700; font-size: 0.72rem;
+    }
+    .flatpickr-day {
+      border-radius: 8px; font-family: var(--font-ui); font-size: 0.875rem;
+    }
+    .flatpickr-day:hover, .flatpickr-day:focus { background: rgba(135,206,235,0.25); border-color: var(--primary); }
+    .flatpickr-day.today { border-color: var(--primary-dk); }
+    .flatpickr-day.today:hover { background: rgba(135,206,235,0.25); color: var(--text-main); }
+    .flatpickr-day.selected, .flatpickr-day.selected:hover, .flatpickr-day.selected:focus {
+      background: var(--primary-dk); border-color: var(--primary-dk); color: #fff;
+    }
+    .flatpickr-day.disabled, .flatpickr-day.disabled:hover {
+      color: #c8d0da !important; text-decoration: line-through; cursor: not-allowed; background: transparent;
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">
+        <img src="assets/logo.png" alt="Lean & Loaded">
+      </a>
+      <a href="index.html" class="nav-back">← Back to site</a>
+    </div>
+  </nav>
+
+  <main>
+
+    <!-- Progress -->
+    <div class="progress-wrap">
+      <div class="progress-steps">
+        <div class="p-step active" id="ps-1">
+          <div class="p-num">1</div>
+          <div class="p-label">Order<br>Details</div>
+        </div>
+        <div class="p-line" id="pl-1"></div>
+        <div class="p-step" id="ps-2">
+          <div class="p-num">2</div>
+          <div class="p-label">Collection<br>/ Delivery</div>
+        </div>
+        <div class="p-line" id="pl-2"></div>
+        <div class="p-step" id="ps-3">
+          <div class="p-num">3</div>
+          <div class="p-label">Payment</div>
+        </div>
+        <div class="p-line" id="pl-3"></div>
+        <div class="p-step" id="ps-4">
+          <div class="p-num">4</div>
+          <div class="p-label">Confirmation</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Step 1: Order Details ── -->
+    <div class="step-card active" id="step-1">
+      <h1 class="step-title">What would you like?</h1>
+      <p class="step-sub">Pick your flavours and add any upgrades per pint.</p>
+
+      <span class="field-label">Choose your flavours</span>
+      <div class="flavour-list" id="flavourList"></div>
+
+      <hr class="sep">
+
+      <div class="field-group">
+        <span class="field-label">Other customisations</span>
+        <textarea id="otherNotes" placeholder="e.g. 150% sweeter, extra creamy…"></textarea>
+      </div>
+
+      <div class="cart-bar hidden" id="cartBar">
+        <span class="cart-bar-label" id="cartBarLabel">0 pints selected</span>
+        <span class="cart-bar-total" id="cartBarTotal">$0</span>
+      </div>
+
+      <div class="btn-row">
+        <div class="spacer"></div>
+        <button class="btn btn-primary" onclick="next(2)">Next →</button>
+      </div>
+    </div>
+
+    <!-- ── Step 2: Collection / Delivery ── -->
+    <div class="step-card" id="step-2">
+      <h1 class="step-title">Collection or Delivery?</h1>
+      <p class="step-sub">Let us know when and where to get your pints to you.</p>
+
+      <div class="field-group">
+        <span class="field-label">Fulfilment</span>
+        <div class="radio-group">
+          <div class="radio-opt on" id="opt-collection" onclick="setFulfilment('collection')">
+            <div class="radio-dot"></div>
+            <div>
+              <div class="radio-lbl">Self-collection</div>
+              <div class="radio-desc">Pick up at our location</div>
+            </div>
+          </div>
+          <div class="radio-opt" id="opt-delivery" onclick="setFulfilment('delivery')">
+            <div class="radio-dot"></div>
+            <div>
+              <div class="radio-lbl">Delivery</div>
+              <div class="radio-desc">Delivered to your doorstep</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="field-row">
+        <div class="field-group">
+          <span class="field-label">Your name *</span>
+          <input type="text" id="custName" placeholder="Full name">
+          <p class="field-err" id="err-name">Please enter your name</p>
+        </div>
+        <div class="field-group">
+          <span class="field-label">Contact number *</span>
+          <input type="tel" id="custContact" placeholder="e.g. 91234567" inputmode="numeric" maxlength="8">
+          <p class="field-err" id="err-contact">Please enter a valid 8-digit Singapore number</p>
+        </div>
+      </div>
+
+      <div class="field-row">
+        <div class="field-group">
+          <span class="field-label">Preferred date *</span>
+          <input type="text" id="custDate" placeholder="Select a date" readonly>
+          <p class="field-err" id="err-date">Please pick a date</p>
+          <p style="font-size:0.72rem;color:var(--text-muted);margin-top:0.4rem;line-height:1.5">Our ice cream is freshly made-to-order, please allow us at least 3 days to fulfil your order.</p>
+        </div>
+        <div class="field-group">
+          <span class="field-label">Preferred time *</span>
+          <select id="custTime" disabled>
+            <option value="">Select a date first</option>
+          </select>
+          <p class="field-err" id="err-time">Please pick a time slot</p>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <span class="field-label">Telegram handle *</span>
+        <p style="font-size:0.75rem;color:var(--text-muted);margin-bottom:0.6rem;line-height:1.5">Fill in your Telegram handle to send us a summary of your order.</p>
+        <input type="text" id="custTelegram" placeholder="e.g. @username">
+        <p class="field-err" id="err-telegram">Please enter your Telegram handle</p>
+      </div>
+
+      <div class="field-group" id="addrGroup" style="display:none">
+        <span class="field-label">Delivery address *</span>
+        <textarea id="custAddr" placeholder="Block, street, unit number, postal code…"></textarea>
+        <p class="field-err" id="err-addr">Please enter your address</p>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-ghost" onclick="next(1)">← Back</button>
+        <div class="spacer"></div>
+        <button class="btn btn-primary" onclick="next(3)">Next →</button>
+      </div>
+    </div>
+
+    <!-- ── Step 3: Payment ── -->
+    <div class="step-card" id="step-3">
+      <h1 class="step-title">Review & Pay</h1>
+      <p class="step-sub">1. Check your order, take a screenshot of the PayNow QR and make payment.<br>2. Attach your payment screenshot to confirm.</p>
+
+      <div class="summary-box" id="paySummary"></div>
+
+      <div class="qr-wrap">
+        <div class="qr-label" style="margin-bottom:0.1rem">Yvelle Nah &nbsp;·&nbsp; +65 8222 8438</div>
+        <div class="qr-box" id="qrBox">
+          <img src="assets/paynow-qr.jpg" alt="PayNow QR">
+        </div>
+        <div class="qr-label">Total Amount</div>
+        <div class="qr-amount" id="qrAmount">$0</div>
+        <div class="qr-note">Take a screenshot</div>
+      </div>
+
+      <span class="field-label">Upload payment screenshot</span>
+      <div class="upload-zone" id="uploadZone" onclick="document.getElementById('proofInput').click()">
+        <input type="file" id="proofInput" accept="image/*" onchange="handleFile(this)" onclick="event.stopPropagation()">
+        <div class="upload-idle" id="uploadIdle">
+          <strong>Tap to upload screenshot</strong>
+          PayNow / PayLah confirmation screenshot
+        </div>
+        <div class="upload-preview" id="uploadPreview">
+          <img class="proof-thumb" id="proofThumb" src="" alt="Payment proof">
+          <button class="proof-clear" onclick="clearFile(event)">✕</button>
+        </div>
+      </div>
+
+      <p class="field-err" id="err-proof" style="margin-bottom:0.75rem">Please attach your payment screenshot before confirming.</p>
+
+      <button class="btn btn-primary" id="submitBtn" onclick="submitOrder()" style="width:100%">
+        Confirm Order →
+      </button>
+
+      <div class="btn-row">
+        <button class="btn btn-ghost" onclick="next(2)">← Back</button>
+      </div>
+    </div>
+
+    <!-- ── Step 4: Confirmation ── -->
+    <div class="step-card" id="step-4">
+      <div class="confirm-wrap">
+        <div class="confirm-icon">✓</div>
+        <h1 class="confirm-h">Order Received!</h1>
+        <p class="confirm-sub">
+          Your order and payment have been submitted.<br>
+          Save a screenshot of the order page for your records!
+        </p>
+      </div>
+
+      <div class="confirm-proof" id="confirmProof" style="display:none">
+        <div class="confirm-proof-lbl">Your payment screenshot</div>
+        <img id="confirmProofImg" src="" alt="Payment proof">
+      </div>
+
+      <div class="summary-box" id="confirmSummary"></div>
+
+      <div style="margin-top:1.75rem; display:flex; flex-direction:column; gap:0.75rem; align-items:center">
+        <a id="tgConfirmBtn" href="#" target="_blank" rel="noopener"
+           class="btn btn-tg" style="display:flex;align-items:center;justify-content:center;gap:0.5rem;text-decoration:none;max-width:340px;width:100%">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="flex-shrink:0"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L7.117 14.6l-2.96-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.831.959z"/></svg>
+          Confirm order on Telegram
+        </a>
+        <button class="btn btn-ghost" onclick="reset()" style="max-width:340px;width:100%">Place Another Order</button>
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    /* ─── Constants ─────────────────────────────────────────── */
+    const FLAVOURS = [
+      { id: 'choconana',     name: 'Choconana',      img: 'assets/choconana.png',     protein: 35, cal: 179 },
+      { id: 'peanutnana',    name: 'Peanut Banana',  img: 'assets/peanutnana.png',    protein: 40, cal: 200 },
+      { id: 'avocado',       name: 'Keto Avocoffee', img: 'assets/avocado.png',       protein: 30, cal: 200 },
+      { id: 'tauhuey',       name: 'Tau Huey',       img: 'assets/tauhuey.png',       protein: 40, cal: 200 },
+      { id: 'chrysanthemum', name: 'Chrysanthemum',  img: 'assets/chrysanthemum.png', protein: 40, cal: 200 },
+    ];
+
+    const BASE          = 16;
+    const ROKEBY        = 2;
+    const STEVIA        = 1;
+    const DELIVERY_FEE  = 15;
+
+    const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+
+    const TIMESLOTS = {
+      weekday: ['3:00 PM – 6:00 PM', '6:00 PM – 8:00 PM'],
+      weekend: ['9:00 AM – 12:00 PM', '12:00 PM – 3:00 PM', '3:00 PM – 6:00 PM', '6:00 PM – 9:00 PM'],
+    };
+
+    /* ─── Supabase ──────────────────────────────────────────── */
+    const SUPABASE_URL = 'https://fydipkywvtmlifytfrii.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_vv9wCTBAnBQ5w5Fvr2VJ-Q_bV6Y1-Jc';
+    const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    /* ─── Order number ──────────────────────────────────────── */
+    async function generateOrderNumber() {
+      const now    = new Date();
+      const sgtMs  = now.getTime() + 8 * 60 * 60 * 1000;
+      const nowSGT = new Date(sgtMs);
+      const daySGT = nowSGT.getUTCDay(); // 0=Sun, 1=Mon…6=Sat
+      const daysSince  = daySGT === 0 ? 6 : daySGT - 1;
+      const mondaySGT  = new Date(nowSGT);
+      mondaySGT.setUTCDate(mondaySGT.getUTCDate() - daysSince);
+      mondaySGT.setUTCHours(0, 0, 0, 0);
+      const weekStartUTC = new Date(mondaySGT.getTime() - 8 * 60 * 60 * 1000).toISOString();
+
+      const { data } = await db
+        .from('orders')
+        .select('order_number')
+        .gte('created_at', weekStartUTC)
+        .order('order_number', { ascending: false })
+        .limit(1);
+
+      const next = (data && data.length > 0 && data[0].order_number) ? data[0].order_number + 1 : 1;
+      return { num: next, display: '#' + String(next).padStart(4, '0') };
+    }
+
+    /* ─── Telegram notification ─────────────────────────────── */
+    const TG_TOKEN   = '8758436826:AAGv_yM0q6zgcWFsA3NpcpoV6xWHWGig-co';
+    const TG_CHAT_ID = '-1003784023828';
+
+    /* ─── State ─────────────────────────────────────────────── */
+    const S = {
+      items: Object.fromEntries(FLAVOURS.map(f => [f.id, { qty: 0, rokeby: false, stevia: false }])),
+      notes: '',
+      fulfilment: 'collection',
+      name: '', contact: '', date: '', time: '', addr: '',
+      telegram: '',
+      orderNum: 0, orderNumDisplay: '',
+    };
+    let datePicker;
+    let proofDataUrl = null;
+
+    /* ─── Pricing ────────────────────────────────────────────── */
+    function lineTotal(id) {
+      const it = S.items[id];
+      if (!it.qty) return 0;
+      return it.qty * (BASE + (it.rokeby ? ROKEBY : 0) + (it.stevia ? STEVIA : 0));
+    }
+    function grandTotal() {
+      const items = FLAVOURS.reduce((s, f) => s + lineTotal(f.id), 0);
+      return items + (S.fulfilment === 'delivery' ? DELIVERY_FEE : 0);
+    }
+    function totalPints() { return FLAVOURS.reduce((s, f) => s + S.items[f.id].qty, 0); }
+
+    /* ─── Build flavour list ─────────────────────────────────── */
+    function buildList() {
+      const el = document.getElementById('flavourList');
+      el.innerHTML = '';
+      FLAVOURS.forEach(f => {
+        const it  = S.items[f.id];
+        const div = document.createElement('div');
+        div.className = 'fl-card' + (it.qty ? ' selected' : '');
+        div.id = 'card-' + f.id;
+        div.innerHTML = `
+          <div class="fl-card-main">
+            <img src="${f.img}" alt="${f.name}" class="fl-thumb">
+            <div class="fl-info">
+              <div class="fl-name">${f.name}</div>
+              <div class="fl-macros">${f.protein}g protein · ${f.cal} kcal</div>
+              <div class="fl-price">$${BASE} / pint</div>
+            </div>
+            <div class="qty-wrap">
+              <button class="qty-btn" onclick="changeQty('${f.id}',-1)">−</button>
+              <span class="qty-val" id="qty-${f.id}">${it.qty}</span>
+              <button class="qty-btn" onclick="changeQty('${f.id}',1)">+</button>
+            </div>
+          </div>
+          <div class="fl-upgrades" id="ups-${f.id}" style="display:${it.qty ? 'flex' : 'none'}">
+            <span class="up-pill${it.rokeby ? ' on' : ''}" id="pill-rokeby-${f.id}" onclick="toggleUp('${f.id}','rokeby')">
+              <span class="up-dot">${it.rokeby ? '✓' : '+'}</span> Rokeby Milk +$${ROKEBY}/pint
+            </span>
+            <span class="up-pill${it.stevia ? ' on' : ''}" id="pill-stevia-${f.id}" onclick="toggleUp('${f.id}','stevia')">
+              <span class="up-dot">${it.stevia ? '✓' : '+'}</span> Stevia +$${STEVIA}/pint
+            </span>
+          </div>
+        `;
+        el.appendChild(div);
+      });
+    }
+
+    /* ─── Quantity ───────────────────────────────────────────── */
+    const MAX_PINTS = 4;
+
+    function changeQty(id, delta) {
+      const it = S.items[id];
+      if (delta > 0 && totalPints() >= MAX_PINTS) return;
+      it.qty = Math.max(0, Math.min(MAX_PINTS, it.qty + delta));
+      if (!it.qty) { it.rokeby = false; it.stevia = false; }
+
+      document.getElementById('qty-' + id).textContent = it.qty;
+      document.getElementById('card-' + id).className = 'fl-card' + (it.qty ? ' selected' : '');
+      document.getElementById('ups-' + id).style.display = it.qty ? 'flex' : 'none';
+
+      if (!it.qty) {
+        ['rokeby','stevia'].forEach(u => {
+          const p = document.getElementById(`pill-${u}-${id}`);
+          p.className = 'up-pill';
+          p.querySelector('.up-dot').textContent = '+';
+        });
+      }
+      refreshCartBar();
+    }
+
+    /* ─── Upgrades ───────────────────────────────────────────── */
+    function toggleUp(id, type) {
+      const it = S.items[id];
+      it[type] = !it[type];
+      const p = document.getElementById(`pill-${type}-${id}`);
+      p.className = 'up-pill' + (it[type] ? ' on' : '');
+      p.querySelector('.up-dot').textContent = it[type] ? '✓' : '+';
+      refreshCartBar();
+    }
+
+    /* ─── Cart bar ───────────────────────────────────────────── */
+    function refreshCartBar() {
+      const pints = totalPints();
+      const bar   = document.getElementById('cartBar');
+      if (pints) {
+        bar.className = 'cart-bar';
+        document.getElementById('cartBarLabel').textContent = pints + ' / ' + MAX_PINTS + (pints === 1 ? ' pint selected' : ' pints selected');
+        document.getElementById('cartBarTotal').textContent = '$' + grandTotal();
+      } else {
+        bar.className = 'cart-bar hidden';
+      }
+    }
+
+    /* ─── Fulfilment toggle ──────────────────────────────────── */
+    function setFulfilment(type) {
+      S.fulfilment = type;
+      document.getElementById('opt-collection').className = 'radio-opt' + (type === 'collection' ? ' on' : '');
+      document.getElementById('opt-delivery').className   = 'radio-opt' + (type === 'delivery'   ? ' on' : '');
+      document.getElementById('addrGroup').style.display  = type === 'delivery' ? 'block' : 'none';
+      updateDateConstraints();
+    }
+
+    /* ─── Date constraints (Flatpickr) ──────────────────────── */
+    function getMinDate() {
+      const min = new Date();
+      min.setDate(min.getDate() + 3);
+      return min;
+    }
+
+    function isDateDisabled(date) {
+      const day = date.getDay();
+      if (day === 1) return true; // Monday always blocked
+      if (S.fulfilment === 'delivery' && day !== 0 && day !== 6) return true;
+      return false;
+    }
+
+    function setDateError(show) {
+      const dateEl = document.getElementById('custDate');
+      const altEl  = datePicker && datePicker.altInput;
+      const target = altEl || dateEl;
+      target.classList.toggle('input-error', show);
+    }
+
+    function initDatePicker() {
+      datePicker = flatpickr('#custDate', {
+        dateFormat: 'Y-m-d',
+        altInput: true,
+        altFormat: 'd/m/Y',
+        minDate: getMinDate(),
+        disable: [isDateDisabled],
+        disableMobile: true,
+        onChange() {
+          document.getElementById('err-date').style.display = 'none';
+          setDateError(false);
+          updateTimeSlots();
+        },
+      });
+    }
+
+    function updateDateConstraints() {
+      if (!datePicker) return;
+      datePicker.set('disable', [isDateDisabled]);
+      datePicker.set('minDate', getMinDate());
+      datePicker.clear();
+      document.getElementById('err-date').style.display = 'none';
+      setDateError(false);
+      updateTimeSlots();
+    }
+
+    function updateTimeSlots() {
+      const timeEl = document.getElementById('custTime');
+      const dateEl = document.getElementById('custDate');
+      if (!dateEl.value) {
+        timeEl.innerHTML = '<option value="">Select a date first</option>';
+        timeEl.disabled = true;
+        return;
+      }
+      const [y, m, d] = dateEl.value.split('-').map(Number);
+      const day = new Date(y, m - 1, d).getDay();
+      const slots = (day === 0 || day === 6) ? TIMESLOTS.weekend : TIMESLOTS.weekday;
+      timeEl.innerHTML = '<option value="">Select a time slot</option>' +
+        slots.map(s => `<option value="${s}">${s}</option>`).join('');
+      timeEl.disabled = false;
+      timeEl.value = '';
+    }
+
+    /* ─── Step navigation ────────────────────────────────────── */
+    function next(n) {
+      if (n === 2 && !validateStep1()) return;
+      if (n === 3 && !validateStep2()) return;
+
+      S.notes = document.getElementById('otherNotes').value.trim();
+      if (n >= 3) {
+        S.name    = document.getElementById('custName').value.trim();
+        S.contact = document.getElementById('custContact').value.trim();
+        S.date      = document.getElementById('custDate').value;
+        S.time      = document.getElementById('custTime').value;
+        S.addr      = document.getElementById('custAddr').value.trim();
+        S.telegram  = document.getElementById('custTelegram').value.trim();
+      }
+
+      for (let i = 1; i <= 4; i++) {
+        document.getElementById('step-' + i).className = 'step-card' + (i === n ? ' active' : '');
+        document.getElementById('ps-' + i).className   = 'p-step' + (i === n ? ' active' : i < n ? ' done' : '');
+        if (i < 4) document.getElementById('pl-' + i).className = 'p-line' + (i < n ? ' done' : '');
+      }
+
+      if (n === 3) renderPayStep();
+      if (n === 4) renderConfirm();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    /* ─── Validation ─────────────────────────────────────────── */
+    function validateStep1() {
+      if (!totalPints()) { alert('Please select at least one flavour.'); return false; }
+      return true;
+    }
+
+    function validateStep2() {
+      const checks = [
+        { id: 'custName',     err: 'err-name',     test: v => v.trim() },
+        { id: 'custContact',  err: 'err-contact',  test: v => /^[689]\d{7}$/.test(v.trim()) },
+        { id: 'custTelegram', err: 'err-telegram',  test: v => v.trim() },
+        { id: 'custTime',     err: 'err-time',     test: v => v },
+      ];
+      if (S.fulfilment === 'delivery') checks.push({ id: 'custAddr', err: 'err-addr', test: v => v.trim() });
+
+      let ok = true;
+      checks.forEach(c => {
+        const el  = document.getElementById(c.id);
+        const err = document.getElementById(c.err);
+        if (c.test(el.value)) {
+          el.classList.remove('input-error'); err.style.display = 'none';
+        } else {
+          el.classList.add('input-error'); err.style.display = 'block'; ok = false;
+        }
+      });
+
+      // Date: presence only — Flatpickr prevents invalid day selection
+      const dateErr = document.getElementById('err-date');
+      if (!document.getElementById('custDate').value) {
+        setDateError(true);
+        dateErr.textContent = 'Please pick a date';
+        dateErr.style.display = 'block';
+        ok = false;
+      } else {
+        setDateError(false);
+        dateErr.style.display = 'none';
+      }
+
+      return ok;
+    }
+
+    /* ─── Summary HTML ───────────────────────────────────────── */
+    function summaryRows() {
+      const ordered = FLAVOURS.filter(f => S.items[f.id].qty > 0);
+      let html = '';
+      ordered.forEach(f => {
+        const it  = S.items[f.id];
+        const ups = [];
+        if (it.rokeby) ups.push(`Rokeby Milk (+$${ROKEBY * it.qty})`);
+        if (it.stevia) ups.push(`Stevia (+$${STEVIA * it.qty})`);
+        html += `
+          <div class="sum-row">
+            <div>
+              <div class="sum-item">${it.qty}× ${f.name}</div>
+              ${ups.length ? `<div class="sum-detail">${ups.join(' · ')}</div>` : ''}
+            </div>
+            <div class="sum-price">$${lineTotal(f.id)}</div>
+          </div>`;
+      });
+      if (S.notes) html += `<div class="sum-row"><div class="sum-item" style="color:var(--text-muted);font-style:italic">Notes: ${esc(S.notes)}</div></div>`;
+      html += `<hr class="sum-div">`;
+      if (S.fulfilment === 'delivery') {
+        html += `<div class="sum-row">
+          <div class="sum-item">Delivery fee</div>
+          <div class="sum-price">$${DELIVERY_FEE}</div>
+        </div>`;
+      }
+      html += `<div class="sum-total-row">
+          <span class="sum-total-lbl">Total</span>
+          <span class="sum-total-price">$${grandTotal()}</span>
+        </div>`;
+      return html;
+    }
+
+    /* ─── Render payment step ────────────────────────────────── */
+    function renderPayStep() {
+      document.getElementById('paySummary').innerHTML = '<div class="summary-hd">Your Order</div>' + summaryRows();
+      document.getElementById('qrAmount').textContent = '$' + grandTotal();
+    }
+
+    /* ─── Render confirmation ────────────────────────────────── */
+    function renderConfirm() {
+      const fulStr = S.fulfilment === 'collection' ? 'Self-collection' : 'Delivery';
+      const extra  = `
+        <hr class="sum-div">
+        <div class="sum-row"><div class="sum-meta">Name</div><div class="sum-meta">${esc(S.name)}</div></div>
+        <div class="sum-row"><div class="sum-meta">Contact</div><div class="sum-meta">${esc(S.contact)}</div></div>
+        <div class="sum-row"><div class="sum-meta">Telegram</div><div class="sum-meta">${esc(S.telegram)}</div></div>
+        <div class="sum-row"><div class="sum-meta">Fulfilment</div><div class="sum-meta">${fulStr}</div></div>
+        ${S.fulfilment === 'delivery' ? `<div class="sum-row"><div class="sum-meta">Address</div><div class="sum-meta">${esc(S.addr)}</div></div>` : ''}
+        <div class="sum-row"><div class="sum-meta">Date & Time</div><div class="sum-meta">${fmtDate(S.date)} at ${fmtTime(S.time)}</div></div>
+      `;
+      document.getElementById('confirmSummary').innerHTML = '<div class="summary-hd">Order Summary</div>' + summaryRows() + extra;
+
+      /* Build Telegram deep-link message */
+      const tgLines = [
+        "Hi! I'd like to confirm my order at Lean & Loaded 🍦",
+        `Order: ${S.orderNumDisplay}`,
+        '',
+        `Name: ${S.name}`,
+        `Contact: ${S.contact}`,
+      ];
+      FLAVOURS.filter(f => S.items[f.id].qty > 0).forEach(f => {
+        const it = S.items[f.id];
+        let line = `• ${it.qty}× ${f.name}`;
+        const adds = [];
+        if (it.rokeby) adds.push('Rokeby Milk');
+        if (it.stevia) adds.push('Stevia');
+        if (adds.length) line += ` (${adds.join(', ')})`;
+        tgLines.push(line);
+      });
+      tgLines.push('', `Total: $${grandTotal()}`);
+      const fulStr2 = S.fulfilment === 'collection' ? 'Self-collection' : 'Delivery';
+      tgLines.push(`Fulfilment: ${fulStr2} — ${fmtDate(S.date)} at ${fmtTime(S.time)}`);
+      if (S.fulfilment === 'delivery' && S.addr) tgLines.push(`Address: ${S.addr}`);
+      if (S.notes) tgLines.push(`Notes: ${S.notes}`);
+      tgLines.push('', 'Please confirm, thank you!');
+      const tgMsg = encodeURIComponent(tgLines.join('\n'));
+      document.getElementById('tgConfirmBtn').href = `https://t.me/bbgorlll?text=${tgMsg}`;
+
+      const proofWrap = document.getElementById('confirmProof');
+      const proofImg  = document.getElementById('confirmProofImg');
+      if (proofDataUrl) {
+        proofImg.src = proofDataUrl;
+        proofWrap.style.display = 'block';
+      } else {
+        proofWrap.style.display = 'none';
+      }
+    }
+
+    /* ─── File upload ────────────────────────────────────────── */
+    function handleFile(input) {
+      const file = input.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = e => {
+        proofDataUrl = e.target.result;
+        document.getElementById('proofThumb').src = proofDataUrl;
+        document.getElementById('uploadIdle').style.display   = 'none';
+        document.getElementById('uploadPreview').style.display = 'block';
+        document.getElementById('err-proof').style.display = 'none';
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function clearFile(e) {
+      e.stopPropagation();
+      proofDataUrl = null;
+      document.getElementById('proofInput').value = '';
+      document.getElementById('proofThumb').src = '';
+      document.getElementById('uploadIdle').style.display   = 'block';
+      document.getElementById('uploadPreview').style.display = 'none';
+    }
+
+    /* ─── Telegram notification ─────────────────────────────── */
+    async function notifyTelegram(items, screenshotUrl, orderNumDisplay) {
+      if (TG_CHAT_ID === 'YOUR_GROUP_CHAT_ID') return;
+      const lines = [`🍦 <b>New Order ${orderNumDisplay} — Lean &amp; Loaded</b>`, '', '<b>Items:</b>'];
+      items.forEach(it => {
+        lines.push(`• ${it.qty}× ${esc(it.name)} — $${it.line_total}`);
+        if (it.rokeby) lines.push(`  ↳ Rokeby Milk (+$${ROKEBY * it.qty})`);
+        if (it.stevia) lines.push(`  ↳ Stevia (+$${STEVIA * it.qty})`);
+      });
+      if (S.notes) lines.push('', `<b>Notes:</b> ${esc(S.notes)}`);
+      lines.push('', `<b>Total: $${grandTotal()}</b>`, '');
+      lines.push(`<b>Fulfilment:</b> ${S.fulfilment === 'collection' ? 'Self-collection' : 'Delivery'}`);
+      lines.push(`<b>Date &amp; Time:</b> ${fmtDate(S.date)} at ${fmtTime(S.time)}`);
+      if (S.fulfilment === 'delivery') lines.push(`<b>Address:</b> ${esc(S.addr)}`);
+      lines.push('', `<b>Name:</b> ${esc(S.name)}`, `<b>Contact:</b> ${esc(S.contact)}`);
+      if (S.telegram) {
+        const handle = S.telegram.replace(/^@/, '');
+        lines.push(`<b>Telegram:</b> <a href="https://t.me/${handle}">${esc(S.telegram)}</a>`);
+      }
+      if (screenshotUrl) lines.push('', `<a href="${screenshotUrl}">View payment screenshot →</a>`);
+      await fetch(`https://api.telegram.org/bot${TG_TOKEN}/sendMessage`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ chat_id: TG_CHAT_ID, text: lines.join('\n'), parse_mode: 'HTML' }),
+      }).catch(() => {});
+    }
+
+    /* ─── Data URL → Blob ────────────────────────────────────── */
+    function dataUrlToBlob(dataUrl) {
+      const [header, data] = dataUrl.split(',');
+      const mime  = header.match(/:(.*?);/)[1];
+      const bytes = atob(data);
+      const arr   = new Uint8Array(bytes.length);
+      for (let i = 0; i < bytes.length; i++) arr[i] = bytes.charCodeAt(i);
+      return new Blob([arr], { type: mime });
+    }
+
+    /* ─── Order submission ───────────────────────────────────── */
+    async function submitOrder() {
+      if (!proofDataUrl) {
+        document.getElementById('err-proof').style.display = 'block';
+        return;
+      }
+      document.getElementById('err-proof').style.display = 'none';
+
+      const btn = document.getElementById('submitBtn');
+      btn.disabled = true;
+      btn.textContent = 'Saving order…';
+
+      const { num: orderNum, display: orderNumDisplay } = await generateOrderNumber();
+      S.orderNum = orderNum;
+      S.orderNumDisplay = orderNumDisplay;
+
+      let screenshotUrl = null;
+
+      try {
+        const blob     = dataUrlToBlob(proofDataUrl);
+        const ext      = blob.type.includes('png') ? 'png' : 'jpg';
+        const filename = `${Date.now()}-${S.contact.replace(/\s/g,'')}.${ext}`;
+        const { data, error } = await db.storage
+          .from('payment-screenshots')
+          .upload(filename, blob, { contentType: blob.type });
+        if (error) throw error;
+        const { data: { publicUrl } } = db.storage
+          .from('payment-screenshots')
+          .getPublicUrl(data.path);
+        screenshotUrl = publicUrl;
+      } catch {
+        btn.disabled = false;
+        btn.textContent = 'Confirm Order →';
+        alert('Failed to upload your payment screenshot. Please check your connection and try again.');
+        return;
+      }
+
+      const orderedItems = FLAVOURS
+        .filter(f => S.items[f.id].qty > 0)
+        .map(f => ({
+          id:         f.id,
+          name:       f.name,
+          qty:        S.items[f.id].qty,
+          rokeby:     S.items[f.id].rokeby,
+          stevia:     S.items[f.id].stevia,
+          line_total: lineTotal(f.id),
+        }));
+      const { error: insertError } = await db.from('orders').insert({
+        name:           S.name,
+        contact:        S.contact,
+        fulfilment:     S.fulfilment === 'collection' ? 'self-collection' : 'delivery',
+        preferred_date: S.date,
+        preferred_time: S.time,
+        address:          S.addr || null,
+        telegram_handle:  S.telegram || null,
+        items:            orderedItems,
+        notes:          S.notes || null,
+        total_sgd:      grandTotal(),
+        screenshot_url: screenshotUrl,
+        order_number:   orderNum,
+        status:         'pending',
+      });
+
+      if (insertError) {
+        btn.disabled = false;
+        btn.textContent = 'Confirm Order →';
+        alert('Something went wrong saving your order. Please try again.');
+        return;
+      }
+
+      await notifyTelegram(orderedItems, screenshotUrl, orderNumDisplay);
+
+      btn.disabled = false;
+      btn.textContent = 'Confirm Order →';
+      next(4);
+    }
+
+    /* ─── Helpers ────────────────────────────────────────────── */
+    function fmtDate(d) {
+      if (!d) return '—';
+      const [y, m, day] = d.split('-');
+      return `${day}/${m}/${y}`;
+    }
+    function fmtTime(t) {
+      if (!t) return '—';
+      if (!/^\d{2}:\d{2}$/.test(t)) return t; // slot string, already formatted
+      const [h, min] = t.split(':').map(Number);
+      return `${h % 12 || 12}:${String(min).padStart(2,'0')} ${h >= 12 ? 'PM' : 'AM'}`;
+    }
+
+    /* ─── Reset ──────────────────────────────────────────────── */
+    function reset() {
+      FLAVOURS.forEach(f => { S.items[f.id] = { qty: 0, rokeby: false, stevia: false }; });
+      Object.assign(S, { notes:'', fulfilment:'collection', name:'', contact:'', date:'', time:'', addr:'', telegram:'', orderNum:0, orderNumDisplay:'' });
+      ['custName','custContact','custTime','custAddr','custTelegram','otherNotes'].forEach(id => {
+        const el = document.getElementById(id); if (el) el.value = '';
+      });
+      proofDataUrl = null;
+      document.getElementById('proofInput').value = '';
+      document.getElementById('proofThumb').src = '';
+      document.getElementById('uploadIdle').style.display   = 'block';
+      document.getElementById('uploadPreview').style.display = 'none';
+      document.getElementById('err-proof').style.display = 'none';
+      ['custName','custContact','custTime','custAddr'].forEach(id => {
+        const el = document.getElementById(id); if (el) el.classList.remove('input-error');
+      });
+      setDateError(false);
+      setFulfilment('collection');
+      buildList();
+      refreshCartBar();
+      next(1);
+    }
+
+    /* ─── Init ───────────────────────────────────────────────── */
+    initDatePicker();
+    buildList();
+  </script>
+</body>
+</html>
