@@ -657,25 +657,9 @@
 
     /* ─── Order number ──────────────────────────────────────── */
     async function generateOrderNumber() {
-      const now    = new Date();
-      const sgtMs  = now.getTime() + 8 * 60 * 60 * 1000;
-      const nowSGT = new Date(sgtMs);
-      const daySGT = nowSGT.getUTCDay(); // 0=Sun, 1=Mon…6=Sat
-      const daysSince  = daySGT === 0 ? 6 : daySGT - 1;
-      const mondaySGT  = new Date(nowSGT);
-      mondaySGT.setUTCDate(mondaySGT.getUTCDate() - daysSince);
-      mondaySGT.setUTCHours(0, 0, 0, 0);
-      const weekStartUTC = new Date(mondaySGT.getTime() - 8 * 60 * 60 * 1000).toISOString();
-
-      const { data } = await db
-        .from('orders')
-        .select('order_number')
-        .gte('created_at', weekStartUTC)
-        .order('order_number', { ascending: false })
-        .limit(1);
-
-      const next = (data && data.length > 0 && data[0].order_number) ? data[0].order_number + 1 : 1;
-      return { num: next, display: '#' + String(next).padStart(4, '0') };
+      const { data } = await db.rpc('get_next_order_number');
+      const num = data || 1;
+      return { num, display: '#' + String(num).padStart(4, '0') };
     }
 
     /* ─── State ─────────────────────────────────────────────── */
